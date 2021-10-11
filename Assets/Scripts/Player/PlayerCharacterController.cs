@@ -52,12 +52,14 @@ public class PlayerCharacterController : MonoBehaviour
 
     private void Update()
     {
+
     }
 
     private void FixedUpdate()
     {
         CheckGrounded();
 
+        Debug.Log(isGrounded);
         if (isGrounded)
         {
             rigidbody.drag = ground.collider.friction * groundFrictionDragMultiplier;
@@ -102,5 +104,6 @@ public class PlayerCharacterController : MonoBehaviour
             isGrounded = true;
             ground = hits[0];
         }
+
     }
 }
