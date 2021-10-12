@@ -11,10 +11,10 @@ public class IdleState : BaseState
 
     public override void StateUpdate(PlayerBehaviourStateMachine state)
     {
-        Debug.Log("Hello from idle");
+        //Debug.Log("Hello from idle");
     }
 
-    public override void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, float acceleration, Rigidbody2D rigidbody, Animator animator, float moveSpeed, RaycastHit2D ground, float animationStepSpeed, Transform transform, ref int direction , float groundFrictionDragMultiplier, Collider2D collider, ContactFilter2D groundCheckFilter, bool isGrounded)
+    public override void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, RaycastHit2D ground, ref int direction,playerStruct player)
     {
         if(moveInput.x != 0)
         {

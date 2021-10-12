@@ -6,7 +6,7 @@ public abstract class BaseState
 
     public abstract void StateUpdate(PlayerBehaviourStateMachine state);
 
-    public abstract void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, float acceleration, Rigidbody2D rigidbody, Animator animator, float moveSpeed, RaycastHit2D ground, float animationStepSpeed, Transform transform, ref int direction , float groundFrictionDragMultiplier, Collider2D collider, ContactFilter2D groundCheckFilter, bool isGrounded);
+    public abstract void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, RaycastHit2D ground, ref int direction,playerStruct player);
 
 
 

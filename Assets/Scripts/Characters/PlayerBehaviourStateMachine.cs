@@ -39,6 +39,7 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     BaseState currentState;
     public IdleState idleState = new IdleState();
     public GroundedState groundState = new GroundedState();
+    playerStruct player;
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +49,9 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
         collider = GetComponent<Collider2D>();
 
         currentState = groundState;
+        player = new playerStruct(acceleration, rigidbody, animator, moveSpeed, animationStepSpeed, transform, groundFrictionDragMultiplier, collider, groundCheckFilter, isGrounded);
         currentState.StateStart(this, collider, groundCheckFilter, ground, isGrounded);
+
 
     }
 
@@ -68,7 +71,7 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     void FixedUpdate()
     {
         groundCheck();
-        currentState.StateFixedUpdate(this, moveInput, acceleration, rigidbody, animator, moveSpeed,ground,animationStepSpeed, transform, ref direction, groundFrictionDragMultiplier, collider, groundCheckFilter, isGrounded);
+        currentState.StateFixedUpdate(this, moveInput, ground, ref direction, player);
     }
 
     public void StateSwitch(BaseState state)
