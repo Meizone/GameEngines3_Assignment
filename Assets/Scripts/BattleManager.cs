@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
+    public enum ExitState { Victory, Loss, Tie }
+    private static BattleManager instance;
+
     Combatant[] combatants;
-    Combatant active;
+    Combatant activeCombatant;
     float waitingSpeedScale = 1.0f;
     float activeSpeedScale = 0.0f;
 
@@ -20,7 +23,8 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-        float speedScale = active == null ? waitingSpeedScale : activeSpeedScale;
+        float speedScale = activeCombatant == null ? waitingSpeedScale : activeSpeedScale;
+
         Combatant mostReady = combatants[0];
         foreach (Combatant combatant in combatants)
         {
@@ -30,6 +34,14 @@ public class BattleManager : MonoBehaviour
         }
 
         if (mostReady.readiness > 100)
-            active = mostReady;
+        {
+            activeCombatant = mostReady;
+            activeCombatant.Activate();
+        }
+    }
+
+    public static void ExitCombat(ExitState exitState)
+    {
+        Debug.LogFormat("<color=yellow>Exiting combat with exit state {0} has not yet been implemented.</color>", exitState);
     }
 }

@@ -1,33 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-//[System.Serializable]
-//public class Effect
-//{
-//    [SerializeField]
-//    private string description;
-//    public virtual void Activate(Combatant combatant) { }
-//    public virtual string GetDescription() { return description; }
-//
-//    public override string ToString()
-//    {
-//        return GetDescription();
-//    }
-//
-//}
 [System.Serializable]
-public class Effect
+public class Effect : IActivated, IDescribable
 {
-    [TextArea] public string description;
-    public enum Type { Passive, OnActivation, Chance, AffectResource };
-    public Type type;
+    public enum Trigger { Activated, Passive, Reactive }
+    public enum Target { Target, Enemies_All, Enemies_Each, Allies_All, Allies_Each, All, Each, Self }
+
+    public string description;
+    public Target target;
+    public Resource resource;
+    public float amountValue;
+    public float amountPercent;
     public float chance;
-    public ResourceType resourceType;
-    public float amount;
-    public Effect[] effects;
+    public Effect[] secondaryEffects;
+    public EffectScript[] scriptedEffects;
 
-    public virtual void Activate(Combatant combatant) { }
-    public virtual string GetDescription() { return description; }
+    public string GetDescription() { return description; }
 
+    public void Activate(Combatant combatant, Combatant target)
+    {
+        switch (this.target)
+        {
+            case Target.Target:
+                break;
+            case Target.Enemies_All:
+                break;
+            case Target.Allies_All:
+                break;
+            default:
+                break;
+        }
+    }
 }

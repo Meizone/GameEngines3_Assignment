@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Alignment
+public interface IDescribable
 {
-    Allies,
-    Enemies,
-    Neutral,
+    public string GetDescription();
 }
