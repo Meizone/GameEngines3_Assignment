@@ -20,18 +20,18 @@ public class AbilityButton : MonoBehaviour
     {
         if (slot != null)
         {
-            button.onClick.RemoveListener(slot.Activate);
-            newSlot.OnStatusChanged.RemoveListener(UpdateClickable);
+            button.onClick.RemoveListener(slot.ChooseTarget);
+            newSlot.OnAvailabilityChanged -= UpdateClickable;
         }
 
         slot = newSlot;
 
-        if (slot != null)
+        if (slot != null && slot.ability.isTargetted)
         {
             gameObject.SetActive(true);
-            text.text = slot.GetAbility.abilityName;
-            button.onClick.AddListener(slot.Activate);
-            newSlot.OnStatusChanged.AddListener(UpdateClickable);
+            text.text = slot.ability.abilityName;
+            button.onClick.AddListener(slot.ChooseTarget);
+            newSlot.OnAvailabilityChanged += UpdateClickable;
         }
         else
         {
@@ -39,7 +39,7 @@ public class AbilityButton : MonoBehaviour
         }
     }
 
-    private void UpdateClickable(float cooldown, bool payable)
+    private bool UpdateClickable(float cooldown, bool payable)
     {
         if (payable && cooldown <= 0.0f)
         {
@@ -53,5 +53,7 @@ public class AbilityButton : MonoBehaviour
         }
 
         cooldownImage.fillAmount = cooldown;
+
+        return (payable && cooldown <= 0.0f);
     }
 }

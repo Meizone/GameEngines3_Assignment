@@ -12,25 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
   m_Name: RunAway
   m_EditorClassIdentifier: 
-  abilityName: Run Away
-  cooldown: 0
-  icon: {fileID: 0}
-  animation: 2
-  target: 0
-  description: 
-  costs:
-  - description: 
-    target: 7
-    resource: 2
-    amountValue: 0
-    amountPercent: 100
-  effects:
-  - description: '{0}% chance to '
-    target: 7
-    resource: 0
-    amountValue: 0
-    amountPercent: 0
-    chance: 25
-    secondaryEffects: []
-    scriptedEffects:
+  _abilityName: Run Away
+  _cooldown: 0
+  _icon: {fileID: 0}
+  _targetType: 0
+  _description: 
+  _costs:
+  - resource: 2
+    direction: -1
+    type: 1
+    _amount: 100
+  _triggers:
+  - _description: 
+    _triggers: 2
+    _triggeredAnimation: 
+    _possibleTargets: 0
+    _maxTargets: 0
+    _evaluateTargets: 0
+    _evaluateConditions: 0
+    _conditions: []
+    _effects:
     - {fileID: 11400000, guid: 89ba7187299d5cf47b76ce9bc53cdec4, type: 2}

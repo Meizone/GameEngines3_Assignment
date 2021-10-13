@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable, CreateAssetMenu(fileName = "Abilities", menuName = "Abilities/LeaveBattleEffect")]
-public class LeaveBattleEffect : EffectScript
+[System.Serializable, CreateAssetMenu(fileName = "LeaveBattleEffect", menuName = "Abilities/Effects/LeaveBattleEffect")]
+public class LeaveBattleEffect : Effect
 {
     public BattleManager.ExitState exitState;
-    public override void Activate(Combatant combatant, Combatant target)
+
+    public override void Execute(Combatant combatant, Combatant target)
     {
-        BattleManager.ExitCombat(exitState);
+        combatant.battle.ExitCombat(exitState);
     }
 }

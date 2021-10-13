@@ -1,4 +1,4 @@
 public interface IActivated
 {
-    public void Activate(Combatant combatant, Combatant target);
+    public void Trigger(Combatant combatant, Combatant target);
 }
