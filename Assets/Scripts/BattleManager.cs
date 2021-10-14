@@ -5,15 +5,26 @@ using static Resource.Type;
 
 public class BattleManager : MonoBehaviour
 {
-    public delegate void AbilityActivatedEvent(Combatant combatant, Combatant target, Ability ability);
-    public delegate void ResourceChangedEvent(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final);
-    public delegate void TurnChangedEvent(Combatant combatant, uint turn, uint turnInBattle);
-    public event AbilityActivatedEvent OnAbilityActivated;
-    public event ResourceChangedEvent OnResourceChanged;
-    public event TurnChangedEvent OnTurnPreStart;
-    public event TurnChangedEvent OnTurnStarted;
-    public event TurnChangedEvent OnTurnEnded;
-    public event TurnChangedEvent OnBattleStarted;
+    #region "Delegates, events, related things"
+    public delegate void AbilityActivatedEventHandler(AbilityData activatedAbility, Combatant target);
+    public delegate void ResourceChangedEventHandler(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final);
+    public delegate void TurnChangedEventHandler(Combatant combatant, uint turn, uint turnInBattle);
+    public event AbilityActivatedEventHandler AbilityActivatedEvent;
+    public event ResourceChangedEventHandler ResourceChangedEvent;
+    public event TurnChangedEventHandler BattleStartedEvent;
+    public event TurnChangedEventHandler TurnPreStartEvent;
+    public event TurnChangedEventHandler TurnStartedEvent;
+    public event TurnChangedEventHandler TurnEndedEvent;
+    [System.Flags] public enum Events
+    {
+        BattleStarted = (1 << 0),
+        AbilityActivated = (1 << 1),
+        TurnPreStart = (1 << 2),
+        TurnStarted = (1 << 3),
+        TurnEnded = (1 << 4),
+        ResourceChanged = (1 << 5),
+    }
+    #endregion
 
     public enum ExitState { Victory, Loss, Tie }
 
@@ -21,7 +32,7 @@ public class BattleManager : MonoBehaviour
     public LinkedList<Combatant> combatants { get { return combatants; } }
 
     private Combatant activeCombatant;
-    private AbilitySlot activatingAbility;
+    private AbilityData activatingAbility;
     private float waitingSpeedScale = 1.0f;
     private float activeSpeedScale = 0.0f;
     private uint turn;
@@ -48,7 +59,7 @@ public class BattleManager : MonoBehaviour
             AddCombatant(combatant);
 
         foreach (Combatant combatant in _combatants)
-            OnBattleStarted?.Invoke(combatant, 0, 0);
+            BattleStartedEvent?.Invoke(combatant, 0, 0);
     }
 
     public void AddCombatant(Combatant combatant)
@@ -82,9 +93,9 @@ public class BattleManager : MonoBehaviour
     {
         ++turn;
         activeCombatant = combatant;
-        OnTurnPreStart?.Invoke(activeCombatant, activeCombatant.turn, turn);
+        TurnPreStartEvent?.Invoke(activeCombatant, activeCombatant.turn, turn);
         activeCombatant.StartTurn();
-        OnTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
+        TurnStartedEvent?.Invoke(activeCombatant, activeCombatant.turn, turn);
     }
 
     public void ExitCombat(ExitState exitState)
@@ -95,31 +106,26 @@ public class BattleManager : MonoBehaviour
 
     public void EventResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
-        OnResourceChanged?.Invoke(combatant, resource, change, final);
+        ResourceChangedEvent?.Invoke(combatant, resource, change, final);
     }
 
-    public void EventAbilityActivated(Combatant combatant, Combatant target, Ability ability)
+    public void StartChoosingTarget(AbilityData ability)
     {
-        OnAbilityActivated?.Invoke(combatant, target, ability);
-    }
-
-    public void StartChoosingTarget(AbilitySlot slot)
-    {
-        activatingAbility = slot;
+        activatingAbility = ability;
 
         Debug.LogFormat("<color=red>Target choosing not yet implemented!");
         switch (activatingAbility.ability.targetType)
         {
-            case Ability.TargetType.Ally:
+            case Ability.SelectableTargets.Ally:
                 break;
-            case Ability.TargetType.Enemy:
+            case Ability.SelectableTargets.Enemy:
                 break;
-            case Ability.TargetType.Self:
+            case Ability.SelectableTargets.Self:
             default:
                 break;
         }
 
-        EventTargetChosen(activatingAbility.combatant);
+        EventTargetChosen(activatingAbility.combatant); // This is TEMPORARY!!!!!!!!!!! The target should be chosen by the user/ai.
     }
 
     public void CancelChoosingTarget()
@@ -130,6 +136,7 @@ public class BattleManager : MonoBehaviour
     public void EventTargetChosen(Combatant target)
     {
         if (activatingAbility != null)
-            activatingAbility.OnTargetChosen(target);
+            if (activatingAbility.Pay(target))
+                AbilityActivatedEvent?.Invoke(activatingAbility, target);
     }
 }

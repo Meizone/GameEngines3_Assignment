@@ -3,45 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class AbilityButton : MonoBehaviour
 {
-    [SerializeField]
-    private Image cooldownImage;
-    [SerializeField]
-    private Button button;
-    [SerializeField]
-    private TextMeshProUGUI text;
-    [SerializeField]
-    private Color disabledColour;
-    
-    private AbilitySlot slot;
-    public void Assign(AbilitySlot newSlot)
+    #region "Member variables and properties"
+    [SerializeField] private Image cooldownImage;
+    [SerializeField] private Button button;
+    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private Color disabledColour;
+    private AbilityData _abilityData;
+    #endregion
+
+    #region "Public functions"
+    public void Assign(AbilityData abilityData)
     {
-        if (slot != null)
+        if (_abilityData != null)
         {
-            button.onClick.RemoveListener(slot.ChooseTarget);
-            newSlot.OnAvailabilityChanged -= UpdateClickable;
+            button.onClick.RemoveListener(ChooseTarget);
+            abilityData.AvailabilityChangedEvent -= UpdateClickable;
         }
 
-        slot = newSlot;
+        _abilityData = abilityData;
 
-        if (slot != null && slot.ability.isTargetted)
+        if (_abilityData != null && _abilityData.ability.isTargetted)
         {
             gameObject.SetActive(true);
-            text.text = slot.ability.abilityName;
-            button.onClick.AddListener(slot.ChooseTarget);
-            newSlot.OnAvailabilityChanged += UpdateClickable;
+            text.text = _abilityData.ability.abilityName;
+            button.onClick.AddListener(ChooseTarget);
+            abilityData.AvailabilityChangedEvent += UpdateClickable;
         }
         else
         {
             gameObject.SetActive(false);
         }
     }
+    #endregion
 
-    private bool UpdateClickable(float cooldown, bool payable)
+    #region "Private functions"
+    private void ChooseTarget()
     {
-        if (payable && cooldown <= 0.0f)
+
+    }
+
+    private void UpdateClickable(uint cooldownValue, float cooldownPercent, bool payable)
+    {
+        if (payable && cooldownPercent <= 0.0f)
         {
             button.enabled = true;
             text.color = Color.white;
@@ -52,8 +59,7 @@ public class AbilityButton : MonoBehaviour
             text.color = disabledColour;
         }
 
-        cooldownImage.fillAmount = cooldown;
-
-        return (payable && cooldown <= 0.0f);
+        cooldownImage.fillAmount = cooldownPercent;
     }
+    #endregion
 }

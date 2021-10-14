@@ -6,6 +6,9 @@ using UnityEngine.Events;
 
 public class Combatant : MonoBehaviour
 {
+    public delegate void TurnStartedEvent();
+    private event TurnStartedEvent OnTurnStarted;
+
     private uint _faction;
     public uint faction { get { return _faction; } }
 
@@ -24,7 +27,7 @@ public class Combatant : MonoBehaviour
     private float _initiative;
 
     // Abilities
-    private AbilitySlot[] abilities;
+    private AbilityData[] _abilities;
 
     private BattleManager _battle;
     public BattleManager battle { get { return _battle; } }
@@ -121,8 +124,8 @@ public class Combatant : MonoBehaviour
         _readiness.Set(Payment.Type.PercentOfTotal, 50.0f);
         _turn = 0;
 
-        foreach (AbilitySlot slot in abilities)
-            slot.Register();
+        foreach (AbilityData ability in _abilities)
+            ability.Register(OnTurnStarted);
     }
 
     public void UpdateReadiness(float speedScale)
@@ -133,9 +136,6 @@ public class Combatant : MonoBehaviour
     public void StartTurn()
     {
         ++_turn;
-        foreach (AbilitySlot abilitySlot in abilities)
-        {
-            abilitySlot.Cooldown();
-        }
+        OnTurnStarted?.Invoke();
     }
 }

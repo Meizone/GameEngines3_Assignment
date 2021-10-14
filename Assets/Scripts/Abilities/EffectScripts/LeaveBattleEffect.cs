@@ -7,8 +7,8 @@ public class LeaveBattleEffect : Effect
 {
     public BattleManager.ExitState exitState;
 
-    public override void Execute(Combatant combatant, Combatant target)
+    public override void Execute(Combatant caster, Combatant target)
     {
-        combatant.battle.ExitCombat(exitState);
+        caster.battle.ExitCombat(exitState);
     }
 }

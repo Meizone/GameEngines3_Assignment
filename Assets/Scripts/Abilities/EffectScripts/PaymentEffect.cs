@@ -7,7 +7,7 @@ public class PaymentEffect : Effect
 {
     public Payment payment;
 
-    public override void Execute(Combatant combatant, Combatant target)
+    public override void Execute(Combatant caster, Combatant target)
     {
         target.Pay(payment);
     }
