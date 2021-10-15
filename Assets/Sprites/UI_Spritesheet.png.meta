@@ -172,8 +172,8 @@ TextureImporter:
       name: UI_Spritesheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 768
+        x: 4
+        y: 764
         width: 512
         height: 256
       alignment: 0
@@ -193,8 +193,8 @@ TextureImporter:
       name: UI_Spritesheet_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 511
+        x: 4
+        y: 504
         width: 512
         height: 256
       alignment: 0
@@ -214,13 +214,13 @@ TextureImporter:
       name: UI_Spritesheet_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 254
+        x: 4
+        y: 244
         width: 256
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 8, y: 8, z: 8, w: 8}
+      border: {x: 10, y: 10, z: 10, w: 10}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -235,13 +235,13 @@ TextureImporter:
       name: UI_Spritesheet_3
       rect:
         serializedVersion: 2
-        x: 257
-        y: 254
+        x: 264
+        y: 244
         width: 256
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 8, y: 8, z: 8, w: 8}
+      border: {x: 10, y: 10, z: 10, w: 10}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -256,9 +256,9 @@ TextureImporter:
       name: UI_Spritesheet_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 65
-        width: 1022
+        x: 4
+        y: 72
+        width: 1016
         height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -277,9 +277,9 @@ TextureImporter:
       name: UI_Spritesheet_5
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1022
+        x: 4
+        y: 4
+        width: 1016
         height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -298,8 +298,8 @@ TextureImporter:
       name: UI_Spritesheet_6
       rect:
         serializedVersion: 2
-        x: 512
-        y: 513
+        x: 768
+        y: 244
         width: 128
         height: 256
       alignment: 0
@@ -319,13 +319,13 @@ TextureImporter:
       name: UI_Spritesheet_7
       rect:
         serializedVersion: 2
-        x: 640
-        y: 513
+        x: 636
+        y: 504
         width: 384
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 0, z: 132, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -340,13 +340,13 @@ TextureImporter:
       name: UI_Spritesheet_8
       rect:
         serializedVersion: 2
-        x: 640
-        y: 768
+        x: 636
+        y: 764
         width: 384
         height: 256
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 0, z: 132, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -361,8 +361,8 @@ TextureImporter:
       name: UI_Spritesheet_9
       rect:
         serializedVersion: 2
-        x: 512
-        y: 768
+        x: 636
+        y: 244
         width: 128
         height: 256
       alignment: 0

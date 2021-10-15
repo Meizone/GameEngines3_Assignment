@@ -89,8 +89,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d8fa7cc065f6940b03178d23ac5b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowOnlyOneOn: 1
-  OnAnyTogglesOn:
+  allowOnlyOne: 1
+  allowNone: 1
+  OnAnyToggleValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnIsAnyToggleActiveChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2018857914038058899}
