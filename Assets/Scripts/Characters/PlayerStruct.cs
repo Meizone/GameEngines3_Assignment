@@ -14,11 +14,10 @@ public struct playerStruct
     public float groundFrictionDragMultiplier; 
     public Collider2D collider; 
     public ContactFilter2D groundCheckFilter; 
-    public bool isGrounded;
 
 
 
-    public playerStruct(float accel, Rigidbody2D r, Animator ani, float move, float stepSpeed, Transform player_transform, float groundFriction, Collider2D collider2d, ContactFilter2D groundFilter, bool Grounded) : this()
+    public playerStruct(float accel, Rigidbody2D r, Animator ani, float move, float stepSpeed, Transform player_transform, float groundFriction, Collider2D collider2d, ContactFilter2D groundFilter) : this()
     {
         acceleration = accel;
         rigidbody = r;
@@ -29,7 +28,6 @@ public struct playerStruct
         groundFrictionDragMultiplier = groundFriction;
         collider = collider2d;
         groundCheckFilter = groundFilter;
-        isGrounded = Grounded;
 
     }
 

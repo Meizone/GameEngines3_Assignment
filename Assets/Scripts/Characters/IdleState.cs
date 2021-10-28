@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class IdleState : BaseState
 {
-    public override void StateStart(PlayerBehaviourStateMachine state, Collider2D collider, ContactFilter2D groundCheckFilter, RaycastHit2D ground, bool isGrounded)
+    public override void StateStart(PlayerBehaviourStateMachine state)
     {
-        
+
     }
 
     public override void StateUpdate(PlayerBehaviourStateMachine state)
@@ -14,9 +14,9 @@ public class IdleState : BaseState
         //Debug.Log("Hello from idle");
     }
 
-    public override void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, RaycastHit2D ground, ref int direction,playerStruct player)
+    public override void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, RaycastHit2D ground, ref int direction, playerStruct player, ref bool isGrounded)
     {
-        if(moveInput.x != 0)
+        if (moveInput.x != 0 && isGrounded)
         {
             state.StateSwitch(state.groundState);
         }
@@ -24,3 +24,4 @@ public class IdleState : BaseState
 
 
 }
+

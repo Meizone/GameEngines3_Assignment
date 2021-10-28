@@ -49,8 +49,8 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
         collider = GetComponent<Collider2D>();
 
         currentState = groundState;
-        player = new playerStruct(acceleration, rigidbody, animator, moveSpeed, animationStepSpeed, transform, groundFrictionDragMultiplier, collider, groundCheckFilter, isGrounded);
-        currentState.StateStart(this, collider, groundCheckFilter, ground, isGrounded);
+        player = new playerStruct(acceleration, rigidbody, animator, moveSpeed, animationStepSpeed, transform, groundFrictionDragMultiplier, collider, groundCheckFilter);
+        currentState.StateStart(this);
 
 
     }
@@ -58,8 +58,10 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
 
     private void OnMove(InputValue value)
     {
+        //if(grounded)
         moveInput = value.Get<Vector2>();
     }
+
 
 
     // Update is called once per frame
@@ -71,19 +73,19 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     void FixedUpdate()
     {
         groundCheck();
-        currentState.StateFixedUpdate(this, moveInput, ground, ref direction, player);
+        currentState.StateFixedUpdate(this, moveInput, ground, ref direction, player, ref isGrounded);
     }
 
     public void StateSwitch(BaseState state)
     {
         currentState = state;
-        state.StateStart(this,collider, groundCheckFilter, ground, isGrounded);
+        state.StateStart(this);
     }
 
     public void groundCheck()
     {
         isGrounded = false; // Assume not grounded until otherwise proven.
-        
+
         RaycastHit2D[] hits = new RaycastHit2D[1];
         collider.Cast(Vector2.down, groundCheckFilter, hits, 0.1f);
 
