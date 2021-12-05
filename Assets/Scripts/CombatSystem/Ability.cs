@@ -10,26 +10,20 @@ public class Ability : ScriptableObject, IDescribable
         Ally = (1 << 1),
         Enemy = (1 << 2),
     }
-    public enum Animation { RaiseWeapon, SwingWeapon, Run }
     #endregion
 
     #region "Member variables and properties"
-
-    [SerializeField] private string _abilityName;
-    [SerializeField] private uint _cooldown;
+    [SerializeField] private string _displayName;
     [SerializeField] private Sprite _icon;
+    [SerializeField] private uint _cooldown;
     [SerializeField] private SelectableTargets _selectableTargets;
     [SerializeField, TextArea] private string _description;
     [SerializeField] private Payment[] _costs;
-    [SerializeField] private Trigger[] _triggers;
-    public Trigger[] triggers { get { return _triggers; } }
-
-    public string abilityName { get { return _abilityName; } }
-    public uint cooldown { get { return _cooldown; } }
+    [SerializeField] protected Trigger[] _triggers;
+    public string displayName { get { return _displayName; } }
     public Sprite icon { get { return _icon; } }
+    public uint cooldown { get { return _cooldown; } }
     public SelectableTargets targetType { get { return _selectableTargets; } }
-    public Payment[] costs { get { return _costs; } }
-
     public bool isTargetted {
         get {
             if (_selectableTargets.HasFlag(SelectableTargets.Ally | SelectableTargets.Enemy))
@@ -39,7 +33,9 @@ public class Ability : ScriptableObject, IDescribable
                         return true;
             }
             return false; } }
-
     public string description => _description;
+    public Payment[] costs { get { return _costs; } }
+    public Trigger[] triggers { get { return _triggers; } }
+
     #endregion
 }

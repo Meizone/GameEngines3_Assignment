@@ -8,8 +8,8 @@ using UnityEngine.Events;
 public class AbilityData
 {
     #region "Delegates and events"
-    public delegate void AvailabiltyChangeEventHandler(uint cooldownValue, float cooldownPercent, bool isPayable);
-    public AvailabiltyChangeEventHandler AvailabilityChangedEvent;
+    public delegate void AvailabiltyChangeEvent(uint cooldownValue, float cooldownPercent, bool isPayable);
+    public AvailabiltyChangeEvent onAvailabilityChanged;
     #endregion
 
     #region "Member variables and properties"
@@ -31,18 +31,7 @@ public class AbilityData
         _cooldown = ability.cooldown;
         return true;
     }
-    #endregion
 
-    #region "Private functions"
-    private void Cooldown()
-    {
-        if (_cooldown > 0)
-        {
-            --_cooldown;
-            AvailabilityChangedEvent?.Invoke(_cooldown, cooldownPercent, isPayable);
-        }
-    }
-    #endregion
     internal void Register(Combatant.TurnStartedEvent onTurnStarted)
     {
         onTurnStarted += Cooldown;
@@ -56,4 +45,16 @@ public class AbilityData
         foreach (Trigger trigger in _ability.triggers)
             trigger.Deregister(this);
     }
+    #endregion
+
+    #region "Private functions"
+    private void Cooldown()
+    {
+        if (_cooldown > 0)
+        {
+            --_cooldown;
+            onAvailabilityChanged?.Invoke(_cooldown, cooldownPercent, isPayable);
+        }
+    }
+    #endregion
 }

@@ -6,15 +6,15 @@ using static Resource.Type;
 public class BattleManager : MonoBehaviour
 {
     #region "Delegates, events, related things"
-    public delegate void AbilityActivatedEventHandler(AbilityData activatedAbility, Combatant target);
-    public delegate void ResourceChangedEventHandler(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final);
-    public delegate void TurnChangedEventHandler(Combatant combatant, uint turn, uint turnInBattle);
-    public event AbilityActivatedEventHandler AbilityActivatedEvent;
-    public event ResourceChangedEventHandler ResourceChangedEvent;
-    public event TurnChangedEventHandler BattleStartedEvent;
-    public event TurnChangedEventHandler TurnPreStartEvent;
-    public event TurnChangedEventHandler TurnStartedEvent;
-    public event TurnChangedEventHandler TurnEndedEvent;
+    public delegate void AbilityActivatedEvent(AbilityData activatedAbility, Combatant target);
+    public delegate void ResourceChangedEvent(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final);
+    public delegate void TurnChangedEvent(Combatant combatant, uint turn, uint turnInBattle);
+    public event AbilityActivatedEvent onAbilityActivated;
+    public event ResourceChangedEvent onResourceChanged;
+    public event TurnChangedEvent onBattleStarted;
+    public event TurnChangedEvent onBeforeTurnStarted;
+    public event TurnChangedEvent onTurnStarted;
+    public event TurnChangedEvent onTurnEnded;
     [System.Flags] public enum Events
     {
         BattleStarted = (1 << 0),
@@ -59,7 +59,7 @@ public class BattleManager : MonoBehaviour
             AddCombatant(combatant);
 
         foreach (Combatant combatant in _combatants)
-            BattleStartedEvent?.Invoke(combatant, 0, 0);
+            onBattleStarted?.Invoke(combatant, 0, 0);
     }
 
     public void AddCombatant(Combatant combatant)
@@ -93,9 +93,9 @@ public class BattleManager : MonoBehaviour
     {
         ++turn;
         activeCombatant = combatant;
-        TurnPreStartEvent?.Invoke(activeCombatant, activeCombatant.turn, turn);
+        onBeforeTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
         activeCombatant.StartTurn();
-        TurnStartedEvent?.Invoke(activeCombatant, activeCombatant.turn, turn);
+        onTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
     }
 
     public void ExitCombat(ExitState exitState)
@@ -106,7 +106,7 @@ public class BattleManager : MonoBehaviour
 
     public void EventResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
-        ResourceChangedEvent?.Invoke(combatant, resource, change, final);
+        onResourceChanged?.Invoke(combatant, resource, change, final);
     }
 
     public void StartChoosingTarget(AbilityData ability)
@@ -137,6 +137,6 @@ public class BattleManager : MonoBehaviour
     {
         if (activatingAbility != null)
             if (activatingAbility.Pay(target))
-                AbilityActivatedEvent?.Invoke(activatingAbility, target);
+                onAbilityActivated?.Invoke(activatingAbility, target);
     }
 }

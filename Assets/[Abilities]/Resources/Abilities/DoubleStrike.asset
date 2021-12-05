@@ -12,16 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
   m_Name: DoubleStrike
   m_EditorClassIdentifier: 
-  _abilityName: Double Strike
-  _cooldown: 0
+  _displayName: 
   _icon: {fileID: 0}
-  _targetType: 0
+  _cooldown: 0
+  _selectableTargets: 0
   _description: 
   _costs: []
   _triggers:
   - _description: 
-    _triggers: 16
-    _triggeredAnimation: 
+    _triggeringEvents: 0
     _possibleTargets: 2
     _maxTargets: 0
     _evaluateTargets: 0

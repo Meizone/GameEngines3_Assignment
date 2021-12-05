@@ -21,7 +21,7 @@ public class AbilityButton : MonoBehaviour
         if (_abilityData != null)
         {
             button.onClick.RemoveListener(ChooseTarget);
-            abilityData.AvailabilityChangedEvent -= UpdateClickable;
+            abilityData.onAvailabilityChanged -= UpdateClickable;
         }
 
         _abilityData = abilityData;
@@ -29,9 +29,9 @@ public class AbilityButton : MonoBehaviour
         if (_abilityData != null && _abilityData.ability.isTargetted)
         {
             gameObject.SetActive(true);
-            text.text = _abilityData.ability.abilityName;
+            text.text = _abilityData.ability.displayName;
             button.onClick.AddListener(ChooseTarget);
-            abilityData.AvailabilityChangedEvent += UpdateClickable;
+            abilityData.onAvailabilityChanged += UpdateClickable;
         }
         else
         {

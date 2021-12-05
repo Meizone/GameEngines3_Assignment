@@ -627,6 +627,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 140905364893120687, guid: 873887a8635d58840b80faefdd41baed, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 428491025714441258, guid: 873887a8635d58840b80faefdd41baed, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -651,6 +655,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4145073016301741931, guid: 873887a8635d58840b80faefdd41baed, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4145073016301741931, guid: 873887a8635d58840b80faefdd41baed, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 243746525723318604, guid: 764a4315081a0ea4389f555206b47407, type: 3}
     - target: {fileID: 5958675500789155815, guid: 873887a8635d58840b80faefdd41baed, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 3
@@ -775,6 +787,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8220969184312072318, guid: 873887a8635d58840b80faefdd41baed, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8904832109216895291, guid: 873887a8635d58840b80faefdd41baed, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 3
@@ -815,7 +831,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3231165619271842549, guid: 873887a8635d58840b80faefdd41baed, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 873887a8635d58840b80faefdd41baed, type: 3}
 --- !u!224 &1632318069 stripped
 RectTransform:

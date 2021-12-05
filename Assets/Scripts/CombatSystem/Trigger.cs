@@ -1,17 +1,20 @@
-/*********************************
+/*****************************************************
 File:       Trigger.cs
 Author:     Kiera Bacon
 Project:    GAME3023 Assignment 1 (By Kiera Bacon and Nathan Nguyen)
-Created:    October 12, 2021
-Modified:   October 13, 2021
+Created:    October 12th, 2021
+Modified:   December 5th, 2021 - Changed Effects and Conditions to be serialized references
+            October 15th, 2021
 Description:
-    Class for 
-*********************************/
+    Class for controlling the execution of effects.
+A trigger is activated by the battle manager, then
+evaluates its conditions before executing its effects.
+*****************************************************/
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[System.Serializable]
+[System.Serializable, ExecuteInEditMode]
 public class Trigger : IDescribable
 {
     #region "Encapsulated enumerations"
@@ -45,8 +48,8 @@ public class Trigger : IDescribable
     private Evaluation _evaluateTargets;
     [SerializeField, Tooltip("All: Returns true only if all conditions do.\n\nAny: Returns true if any condition does.\n\nEach: Returns true each time a condition does.")]
     private Evaluation _evaluateConditions;
-    [SerializeField] private Condition[] _conditions;
-    [SerializeField] private Effect[] _effects;
+    [SerializeReference] private Condition[] _conditions;
+    [SerializeReference] private Effect[] _effects;
     public string description { get { return _description; } }
     public bool IsTriggeredBy(BattleManager.Events trigger) { return _triggeringEvents.HasFlag(trigger); }
     #endregion
@@ -54,23 +57,24 @@ public class Trigger : IDescribable
     #region "Public functions"
     public void Register(AbilityData callingAbility)
     {
+        UnityEngine.UI.Button b;
         BattleManager battle = callingAbility.combatant.battle;
-        battle.AbilityActivatedEvent += (activatedAbility, target) => OnAbilityActivated(callingAbility, activatedAbility, target);
-        battle.ResourceChangedEvent += (combatant, resource, change, final) => OnResourceChanged(callingAbility, combatant, resource, change, final);
-        battle.BattleStartedEvent += (combatant, turn, turnInBattle) => OnBattleStarted(callingAbility, combatant);
-        battle.TurnPreStartEvent += (combatant, turn, turnInBattle) => OnTurnPreStart(callingAbility, combatant, turn, turnInBattle);
-        battle.TurnStartedEvent += (combatant, turn, turnInBattle) => OnTurnStarted(callingAbility, combatant, turn, turnInBattle);
-        battle.TurnEndedEvent += (combatant, turn, turnInBattle) => OnTurnEnded(callingAbility, combatant, turn, turnInBattle);
+        battle.onAbilityActivated += (activatedAbility, target) => OnAbilityActivated(callingAbility, activatedAbility, target);
+        battle.onResourceChanged += (combatant, resource, change, final) => OnResourceChanged(callingAbility, combatant, resource, change, final);
+        battle.onBattleStarted += (combatant, turn, turnInBattle) => OnBattleStarted(callingAbility, combatant);
+        battle.onBeforeTurnStarted += (combatant, turn, turnInBattle) => OnBeforeTurnStarted(callingAbility, combatant, turn, turnInBattle);
+        battle.onTurnStarted += (combatant, turn, turnInBattle) => OnTurnStarted(callingAbility, combatant, turn, turnInBattle);
+        battle.onTurnEnded += (combatant, turn, turnInBattle) => OnTurnEnded(callingAbility, combatant, turn, turnInBattle);
     }
     public void Deregister(AbilityData callingAbility)
     {
         BattleManager battle = callingAbility.combatant.battle;
-        battle.AbilityActivatedEvent -= (activatedAbility, target) => OnAbilityActivated(callingAbility, activatedAbility, target);
-        battle.ResourceChangedEvent -= (combatant, resource, change, final) => OnResourceChanged(callingAbility, combatant, resource, change, final);
-        battle.BattleStartedEvent -= (combatant, turn, turnInBattle) => OnBattleStarted(callingAbility, combatant);
-        battle.TurnPreStartEvent -= (combatant, turn, turnInBattle) => OnTurnPreStart(callingAbility, combatant, turn, turnInBattle);
-        battle.TurnStartedEvent -= (combatant, turn, turnInBattle) => OnTurnStarted(callingAbility, combatant, turn, turnInBattle);
-        battle.TurnEndedEvent -= (combatant, turn, turnInBattle) => OnTurnEnded(callingAbility, combatant, turn, turnInBattle);
+        battle.onAbilityActivated -= (activatedAbility, target) => OnAbilityActivated(callingAbility, activatedAbility, target);
+        battle.onResourceChanged -= (combatant, resource, change, final) => OnResourceChanged(callingAbility, combatant, resource, change, final);
+        battle.onBattleStarted -= (combatant, turn, turnInBattle) => OnBattleStarted(callingAbility, combatant);
+        battle.onBeforeTurnStarted -= (combatant, turn, turnInBattle) => OnBeforeTurnStarted(callingAbility, combatant, turn, turnInBattle);
+        battle.onTurnStarted -= (combatant, turn, turnInBattle) => OnTurnStarted(callingAbility, combatant, turn, turnInBattle);
+        battle.onTurnEnded -= (combatant, turn, turnInBattle) => OnTurnEnded(callingAbility, combatant, turn, turnInBattle);
     }
     #endregion
 
@@ -98,7 +102,7 @@ public class Trigger : IDescribable
         return true;
     }
 
-    private bool OnTurnPreStart(AbilityData callingAbility, Combatant combatant, uint turn, uint turnInBattle)
+    private bool OnBeforeTurnStarted(AbilityData callingAbility, Combatant combatant, uint turn, uint turnInBattle)
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.TurnPreStart))
             return false;
@@ -119,7 +123,7 @@ public class Trigger : IDescribable
     #endregion
 
     #region "Private functions"
-    private void ActivateEffects(Combatant combatant, Combatant target)
+    private void ExecuteEffects(Combatant combatant, Combatant target)
     {
         foreach (Effect effect in _effects)
             effect.Execute(combatant, target);
@@ -137,14 +141,14 @@ public class Trigger : IDescribable
                         return;
                     }
                 }
-                ActivateEffects(activatedAbility.combatant, target);
+                ExecuteEffects(activatedAbility.combatant, target);
                 return;
             case Evaluation.Any:
                 foreach (Combatant combatant in selectedTargets)
                 {
                     if (EvaluateConditions(activatedAbility.combatant, combatant))
                     {
-                        ActivateEffects(activatedAbility.combatant, target);
+                        ExecuteEffects(activatedAbility.combatant, target);
                         return;
                     }
                 }
@@ -154,7 +158,7 @@ public class Trigger : IDescribable
                 {
                     if (EvaluateConditions(activatedAbility.combatant, combatant))
                     {
-                        ActivateEffects(activatedAbility.combatant, target);
+                        ExecuteEffects(activatedAbility.combatant, target);
                     }
                 }
                 return;
@@ -190,7 +194,7 @@ public class Trigger : IDescribable
                 {
                     if (condition.Evaluate(caster, target))
                     {
-                        ActivateEffects(caster, target);
+                        ExecuteEffects(caster, target);
                     }
                 }
                 return false;

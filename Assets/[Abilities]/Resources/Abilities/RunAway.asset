@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
   m_Name: RunAway
   m_EditorClassIdentifier: 
-  _abilityName: Run Away
-  _cooldown: 0
+  _displayName: 
   _icon: {fileID: 0}
+  _cooldown: 0
   _selectableTargets: 0
   _description: 
   _costs:
@@ -24,8 +24,8 @@ MonoBehaviour:
     _amount: 100
   _triggers:
   - _description: 
-    _triggeringEvents: 0
-    _possibleTargets: 0
+    _triggeringEvents: 2
+    _possibleTargets: 2
     _maxTargets: 0
     _evaluateTargets: 0
     _evaluateConditions: 0
