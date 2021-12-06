@@ -26,6 +26,10 @@ MonoBehaviour:
     _evaluateTargets: 0
     _evaluateConditions: 0
     _conditions:
-    - {fileID: 11400000, guid: 4405817940a6f544a851d60f8a9fdd51, type: 2}
-    _effects:
-    - {fileID: 11400000, guid: 3f35e4a61551793489a804fe6b883cab, type: 2}
+    - id: 0
+    - id: 0
+    _effects: []
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }

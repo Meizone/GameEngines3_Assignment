@@ -29,6 +29,19 @@ MonoBehaviour:
     _maxTargets: 0
     _evaluateTargets: 0
     _evaluateConditions: 0
-    _conditions: []
+    _conditions:
+    - id: 0
     _effects:
-    - {fileID: 11400000, guid: 89ba7187299d5cf47b76ce9bc53cdec4, type: 2}
+    - id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: ChanceCondition, ns: , asm: Assembly-CSharp}
+      data:
+        _description: 
+        chance: 0
+    00000001:
+      type: {class: LeaveBattleEffect, ns: , asm: Assembly-CSharp}
+      data:
+        _description: 
+        exitState: 1

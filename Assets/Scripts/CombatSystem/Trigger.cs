@@ -48,8 +48,8 @@ public class Trigger : IDescribable
     private Evaluation _evaluateTargets;
     [SerializeField, Tooltip("All: Returns true only if all conditions do.\n\nAny: Returns true if any condition does.\n\nEach: Returns true each time a condition does.")]
     private Evaluation _evaluateConditions;
-    [SerializeReference] private Condition[] _conditions;
-    [SerializeReference] private Effect[] _effects;
+    [SerializeReference, SelectableReferenceType(typeof(Condition))] private Condition[] _conditions;
+    [SerializeReference, SelectableReferenceType(typeof(Effect))] private Effect[] _effects;
     public string description { get { return _description; } }
     public bool IsTriggeredBy(BattleManager.Events trigger) { return _triggeringEvents.HasFlag(trigger); }
     #endregion
@@ -83,8 +83,6 @@ public class Trigger : IDescribable
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.AbilityActivated))
             return false;
-
-
         return true;
 ;    }
 

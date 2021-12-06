@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public abstract class Effect : IDescribable
 {
     [SerializeField, TextArea] private string _description;
