@@ -7,6 +7,39 @@ public class ResourceCondition : Condition
     public Resource.Query query;
     public BinaryPredicate binaryPredicate;
     public float amount;
+
+    public override string Description
+    {
+        get
+        {
+            string predStr = "";
+            bool et = binaryPredicate.HasFlag(BinaryPredicate.EqualTo);
+            bool gt = binaryPredicate.HasFlag(BinaryPredicate.GreaterThan);
+            bool lt = binaryPredicate.HasFlag(BinaryPredicate.LessThan);
+            if (binaryPredicate == 0)
+                return string.Format("{0} {1}", resource, "does not exist as a concept.");
+            else if (lt && !et && !gt)
+                predStr = "is less than";
+            else if (!lt && et && !gt)
+                predStr = "is equal to";
+            else if (!lt && !et && gt)
+                predStr = "is greater than";
+            else if (lt && et && !gt)
+                predStr = "is less than or equal to";
+            else if (!lt && et && gt)
+                predStr = "is greater than or equal to";
+            else if (lt && !et && gt)
+                predStr = "is not equal to";
+            else
+                return string.Format("{0} {1}", resource, "exists as a concept.");
+
+            return string.Format(description, resource, query.ToString().ToLower(), predStr, amount);
+        }
+    }
+    public ResourceCondition()
+    {
+        description = "{0} {1} {2} {3}.";
+    }
     public override bool Evaluate(Combatant caster, Combatant target)
     {
         bool result = true;

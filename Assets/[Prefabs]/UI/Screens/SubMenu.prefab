@@ -767,10 +767,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 24
-    m_Bottom: 24
+    m_Top: 4
+    m_Bottom: 4
   m_ChildAlignment: 1
-  m_Spacing: 24
+  m_Spacing: 8
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -994,6 +994,7 @@ GameObject:
   - component: {fileID: 7955085603735776757}
   - component: {fileID: 66505983088188785}
   - component: {fileID: 1288596833391385047}
+  - component: {fileID: 6554245111124004710}
   m_Layer: 5
   m_Name: SubMenu
   m_TagString: Untagged
@@ -1113,6 +1114,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &6554245111124004710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7955085603735776758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d49b65e61de06b4ebbbb8cf2bfb05d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selection: {fileID: 0}
 --- !u!1 &7968014483475509306
 GameObject:
   m_ObjectHideFlags: 0

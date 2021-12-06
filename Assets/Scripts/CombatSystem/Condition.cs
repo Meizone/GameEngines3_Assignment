@@ -3,8 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public abstract class Condition : IDescribable
 {
-    [SerializeField, TextArea] private string _description;
-    public string description => _description;
+    [SerializeField, TextArea] protected string description;
+    public abstract string Description { get; }
 
     public abstract bool Evaluate(Combatant caster, Combatant target);
 }

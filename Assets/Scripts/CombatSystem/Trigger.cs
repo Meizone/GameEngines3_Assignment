@@ -50,7 +50,14 @@ public class Trigger : IDescribable
     private Evaluation _evaluateConditions;
     [SerializeReference, SelectableReferenceType(typeof(Condition))] private Condition[] _conditions;
     [SerializeReference, SelectableReferenceType(typeof(Effect))] private Effect[] _effects;
-    public string description { get { return _description; } }
+    public string Description {
+        get
+        {
+            Debug.Log(_conditions[0].Description);
+            return string.Format(_description, _conditions.Select(c => c.Description).ToArray());
+        }
+    }
+    
     public bool IsTriggeredBy(BattleManager.Events trigger) { return _triggeringEvents.HasFlag(trigger); }
     #endregion
 

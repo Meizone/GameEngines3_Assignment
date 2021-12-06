@@ -7,8 +7,10 @@ public class SetSelectedOnActivation : MonoBehaviour
 {
     [SerializeField]
     GameObject selection;
+
     private void OnEnable()
     {
-        EventSystem.current.SetSelectedGameObject(selection);
+        if (selection != null)
+            EventSystem.current.SetSelectedGameObject(selection);
     }
 }

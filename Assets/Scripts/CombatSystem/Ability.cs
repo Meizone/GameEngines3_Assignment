@@ -13,6 +13,7 @@ public class Ability : ScriptableObject, IDescribable
     #endregion
 
     #region "Member variables and properties"
+    [SerializeField, ReadOnly] private string description;
     [SerializeField] private string _displayName;
     [SerializeField] private Sprite _icon;
     [SerializeField] private uint _cooldown;
@@ -33,9 +34,22 @@ public class Ability : ScriptableObject, IDescribable
                         return true;
             }
             return false; } }
-    public string description => _description;
+    public string Description => _description;
     public Payment[] costs { get { return _costs; } }
     public Trigger[] triggers { get { return _triggers; } }
 
     #endregion
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        string n = "";
+        foreach (Trigger trigger in triggers)
+        {
+            n = n + trigger.Description;
+        }
+
+        description = n;
+    }
+#endif
 }

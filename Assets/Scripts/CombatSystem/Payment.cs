@@ -18,5 +18,5 @@ public struct Payment : IDescribable
         get { return Mathf.Abs(_amount); }
         set { if (value < 0) direction = (Direction)((int)direction * -1.0f);
             _amount = Mathf.Abs(value); } }
-    public string description { get { Debug.LogFormat("<color=yellow>Descriptions have not yet been implemented for Payments.</color>"); return ""; } }
+    public string Description { get { Debug.LogFormat("<color=yellow>Descriptions have not yet been implemented for Payments.</color>"); return ""; } }
 }

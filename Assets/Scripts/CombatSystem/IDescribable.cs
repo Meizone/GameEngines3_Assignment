@@ -1,4 +1,4 @@
 public interface IDescribable
 {
-    public string description { get; }
+    public string Description { get; }
 }

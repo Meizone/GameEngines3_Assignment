@@ -107,7 +107,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -377,7 +377,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -513,7 +513,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -649,7 +649,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -783,7 +783,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -919,7 +919,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: -24
+  m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1124,6 +1124,10 @@ PrefabInstance:
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6554245111124004710, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}
+      propertyPath: selection
+      value: 
+      objectReference: {fileID: 4896111710817973420}
     - target: {fileID: 6582762302481686228, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1131,10 +1135,6 @@ PrefabInstance:
     - target: {fileID: 6582762302481686228, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7955085602003261189, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}
-      propertyPath: m_Spacing
-      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 7955085602003261190, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1242,6 +1242,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}
+--- !u!1 &4896111710817973420 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7049640443481878741, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}
+  m_PrefabInstance: {fileID: 2460972043854251129}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5494678784032576383 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7955085602003261190, guid: 23f354b5404d4c34c9e94165c1a21779, type: 3}

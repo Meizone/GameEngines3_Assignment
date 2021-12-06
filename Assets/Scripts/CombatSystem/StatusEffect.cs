@@ -17,7 +17,7 @@ public class StatusEffect : ScriptableObject, IDescribable
     public string displayName { get { return _displayName; } }
     public Sprite icon { get { return _icon; } }
     public uint duration { get { return _duration; } }
-    public string description => _description;
+    public string Description => _description;
     public Trigger[] triggers { get { return _triggers; } }
     #endregion
 }
