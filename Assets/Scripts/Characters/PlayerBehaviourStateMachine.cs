@@ -26,6 +26,7 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
 
     // Private variables
     private Vector2 moveInput = Vector2.zero;
+    private bool IsJump = false;
     private int direction = 1;
     [SerializeField]
     private bool isGrounded = false;
@@ -58,10 +59,24 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
 
     private void OnMove(InputValue value)
     {
-        //if(grounded)
         moveInput = value.Get<Vector2>();
     }
 
+    private void OnJump(InputValue value)
+    {
+        IsJump = ((value.Get<float>() != 0) ? true : false); 
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log(col.gameObject.name);
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        Debug.Log(col.gameObject.name);
+    }
 
 
     // Update is called once per frame
@@ -73,7 +88,7 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     void FixedUpdate()
     {
         groundCheck();
-        currentState.StateFixedUpdate(this, moveInput, ground, ref direction, player, ref isGrounded);
+        currentState.StateFixedUpdate(this, moveInput, ground, ref direction, player, ref isGrounded, ref IsJump);
     }
 
     public void StateSwitch(BaseState state)

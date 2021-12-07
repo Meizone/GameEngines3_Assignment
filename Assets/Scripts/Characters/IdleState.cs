@@ -14,7 +14,7 @@ public class IdleState : BaseState
         //Debug.Log("Hello from idle");
     }
 
-    public override void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, RaycastHit2D ground, ref int direction, playerStruct player, ref bool isGrounded)
+    public override void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, RaycastHit2D ground, ref int direction, playerStruct player, ref bool isGrounded, ref bool isJump)
     {
         if (moveInput.x != 0 && isGrounded)
         {
