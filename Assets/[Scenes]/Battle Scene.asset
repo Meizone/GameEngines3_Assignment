@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Level
   buildIndex: 0
   loadingImage: {fileID: 0}
-  loadingText: Getting ready for battle!
+  loadingText: Returning To the Overworld

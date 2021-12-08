@@ -88,8 +88,6 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     void Update()
     {
         currentState.StateUpdate(this);
-
-
     }
 
     void FixedUpdate()
