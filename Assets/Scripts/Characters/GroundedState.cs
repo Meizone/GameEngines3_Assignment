@@ -22,6 +22,7 @@ public class GroundedState : BaseState
         {
             state.StateSwitch(state.idleState);
         }
+
             
         player.rigidbody.drag = ground.collider.friction * player.groundFrictionDragMultiplier;
         float moddedMoveSpeed = player.moveSpeed * (1 + player.rigidbody.drag * 0.1f);
