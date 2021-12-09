@@ -21,7 +21,7 @@ public class Resource
     [SerializeField] private float _min;
     [SerializeField] private float _max;
     public float current { get { return _current; } }
-    public float percent { get { return 100.0f * ((_current - _min) / (_max - _min)); } }
+    public float percent { get { if ((_max - _min) == 0) return 100.0f; return 100.0f * ((_current - _min) / (_max - _min)); } }
     public float range { get { return _max - _min; } }
     public Value value { get { return Get(); } }
 
@@ -44,7 +44,8 @@ public class Resource
 
     public bool CanPay(Payment.Direction direction, Payment.Type type, float amount)
     {
-        return Evaluate(direction, type, amount) > _min;
+        Debug.LogWarning("Evaluate(direction, type, amount)" + Evaluate(direction, type, amount) + "_min" + _min);
+        return Evaluate(direction, type, amount) >= _min;
     }
 
     public void Set(Payment.Type type, float amount)
@@ -72,6 +73,9 @@ public class Resource
     /// </summary>
     private float Evaluate(Payment.Direction direction, Payment.Type type, float amount)
     {
+        if (amount == 0)
+            return _current;
+
         if (direction == Payment.Direction.None)
             return _current;
         else if (direction == Payment.Direction.Debit)
@@ -83,10 +87,11 @@ public class Resource
                 return _current + amount;
             case Payment.Type.PercentOfCurrent:
                 amount *= 0.01f;
-                return _min + amount * percent * range;
+                Debug.LogError(_min + (amount * percent * range));
+                return _min + (amount * percent * range);
             case Payment.Type.PercentOfTotal:
                 amount *= 0.01f;
-                return _current + amount * (_max - _min);
+                return _current + (amount * (_max - _min));
             default:
                 Debug.LogErrorFormat("<color=red>Attempting to process payment of unknown type.</color>");
                 return _min - 1;

@@ -454,19 +454,27 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2110051708, guid: ebea5f8b8163f9a4ab9d9a1b45444e28, type: 3}
+      propertyPath: _speed
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2110051708, guid: ebea5f8b8163f9a4ab9d9a1b45444e28, type: 3}
       propertyPath: _abilities.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2110051708, guid: ebea5f8b8163f9a4ab9d9a1b45444e28, type: 3}
       propertyPath: abilityTypes.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2110051708, guid: ebea5f8b8163f9a4ab9d9a1b45444e28, type: 3}
       propertyPath: abilityTypes.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: d2afa29dea45f8b4eaa7d0c961cf2ffe, type: 2}
+      objectReference: {fileID: 11400000, guid: ddb87dae14da2b949848fc2a5315ad33, type: 2}
     - target: {fileID: 2110051708, guid: ebea5f8b8163f9a4ab9d9a1b45444e28, type: 3}
       propertyPath: abilityTypes.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: d2afa29dea45f8b4eaa7d0c961cf2ffe, type: 2}
+    - target: {fileID: 2110051708, guid: ebea5f8b8163f9a4ab9d9a1b45444e28, type: 3}
+      propertyPath: abilityTypes.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: 80b95b2dc45077747930691badee466d, type: 2}
     - target: {fileID: 2110051708, guid: ebea5f8b8163f9a4ab9d9a1b45444e28, type: 3}
@@ -3753,6 +3761,14 @@ PrefabInstance:
     - target: {fileID: 683836983546664172, guid: 29120dadd068c5d45ac4d4ac015bb7d7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619540145444268746, guid: 29120dadd068c5d45ac4d4ac015bb7d7, type: 3}
+      propertyPath: _speed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4619540145444268746, guid: 29120dadd068c5d45ac4d4ac015bb7d7, type: 3}
+      propertyPath: _initiative
+      value: 26.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29120dadd068c5d45ac4d4ac015bb7d7, type: 3}

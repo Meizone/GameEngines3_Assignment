@@ -18,5 +18,18 @@ public struct Payment : IDescribable
         get { return Mathf.Abs(_amount); }
         set { if (value < 0) direction = (Direction)((int)direction * -1.0f);
             _amount = Mathf.Abs(value); } }
+
     public string Description { get { Debug.LogFormat("<color=yellow>Descriptions have not yet been implemented for Payments.</color>"); return ""; } }
+
+    public Payment(Resource.Type resource, Direction direction, Type type, float amount)
+    {
+        this.resource = resource;
+        this.direction = direction;
+        if (amount < 0)
+            this.direction = (Direction)((int)direction * -1.0f);
+        this.type = type;
+        _amount = Mathf.Abs(amount);
+    }
+
+    public Payment(Resource.Type resource, float amount) : this(resource, Direction.Debit, Type.Value, amount) { }
 }

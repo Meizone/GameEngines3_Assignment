@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RunAway
   m_EditorClassIdentifier: 
   description: 
-  _displayName: 
+  _displayName: Run Away
   _icon: {fileID: 0}
   _cooldown: 0
   _selectableTargets: 0

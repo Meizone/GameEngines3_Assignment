@@ -72,7 +72,6 @@ public class BattleManager : MonoBehaviour
 
     public void AddCombatant(Combatant combatant)
     {
-        Debug.Log("BattleManager.AddCombatant");
         _combatants.AddLast(combatant);
         combatant.StartBattle(this);
         onCombatantAdded?.Invoke(combatant);
@@ -107,6 +106,10 @@ public class BattleManager : MonoBehaviour
         onBeforeTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
         activeCombatant.StartTurn();
         onTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
+        if (!activeCombatant.isPlayerControlled)
+        {
+            activeCombatant.ChooseRandomAbility();
+        }
     }
 
     public ref readonly Combatant GetActiveCombatant()
@@ -127,7 +130,6 @@ public class BattleManager : MonoBehaviour
 
     public void EventResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
-        Debug.Log("BattleManager.EventResourceChanged " + resource + " " + final.amount + ".");
         onResourceChanged?.Invoke(combatant, resource, change, final);
     }
 
@@ -149,6 +151,8 @@ public class BattleManager : MonoBehaviour
         }
 
         EventTargetChosen(activatingAbility.combatant); // This is TEMPORARY!!!!!!!!!!! The target should be chosen by the user/ai.
+        onTurnEnded?.Invoke(activeCombatant, activeCombatant.turn, turn);
+        activeCombatant = null;
     }
 
     public void CancelChoosingTarget()

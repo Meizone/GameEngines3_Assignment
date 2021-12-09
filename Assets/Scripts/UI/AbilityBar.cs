@@ -39,6 +39,7 @@ public class AbilityBar : MonoBehaviour
             return;
 
         battle.onTurnStarted += OnTurnStarted;
+        battle.onTurnEnded += OnTurnEnded;
         battle.onTargettingStarted += OnTargettingStarted;
         battle.onTargettingCancelled += OnTargettingCancelled;
         battle.onAbilityActivated += OnAbilityActivated;
@@ -50,6 +51,7 @@ public class AbilityBar : MonoBehaviour
             return;
 
         battle.onTurnStarted -= OnTurnStarted;
+        battle.onTurnEnded -= OnTurnEnded;
         battle.onTargettingStarted -= OnTargettingStarted;
         battle.onTargettingCancelled -= OnTargettingCancelled;
         battle.onAbilityActivated -= OnAbilityActivated;
@@ -78,20 +80,32 @@ public class AbilityBar : MonoBehaviour
             abPool.Enqueue(Instantiate(abilityButtonPrefab, abilityBar));
 
         AbilityButton abilityButton = abPool.Dequeue();
+        activeButtons.AddLast(abilityButton);
         abilityButton.gameObject.SetActive(true);
+        abilityButton.ForceInactive = false;
+        abilityButton.transform.SetAsLastSibling();
         return abilityButton;
     }
 
-    private void ReturnAbilityButton(AbilityButton abilityButton)
+    private void ReturnAbilityButton(AbilityButton abilityButton, bool removeFromActiveList = true)
     {
+        Debug.Log("ReturnAbilityButton");
         abilityButton.gameObject.SetActive(false);
+        abilityButton.ForceInactive = false;
+        if (removeFromActiveList)
+            activeButtons.Remove(abilityButton);
         abPool.Enqueue(abilityButton);
     }
 
     private void OnTurnStarted(Combatant combatant, uint turn, uint turnInBattle)
     {
-        Debug.Log("AbilityBar.OnTurnStarted");
         SetCombatant(combatant);
+    }
+
+    private void OnTurnEnded(Combatant combatant, uint turn, uint turnInBattle)
+    {
+        Debug.Log("AbilityBar.OnTurnEnded");
+        SetCombatant(null);
     }
 
     private void OnTargettingStarted(AbilityData ability)
@@ -114,7 +128,8 @@ public class AbilityBar : MonoBehaviour
     {
         foreach (AbilityButton abilityButton in activeButtons)
         {
-            ReturnAbilityButton(abilityButton);
+            ReturnAbilityButton(abilityButton, false);
         }
+        activeButtons.Clear();
     }
 }

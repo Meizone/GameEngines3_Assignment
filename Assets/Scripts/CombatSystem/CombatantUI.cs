@@ -109,7 +109,9 @@ public class CombatantUI : MonoBehaviour
 
     private void OnResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
-        Debug.Log("CombatantUI.OnResourceChanged for " + combatant.gameObject.name + "'s " + resource + ".");
+        if (combatant != this.combatant)
+            return;
+
         switch (resource)
         {
             case Resource.Type.Health:

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -29,14 +30,14 @@ public class Combatant : MonoBehaviour
     public Resource[] Resources { get { return new Resource[] { _aether, _readiness, _health, _mana }; } }
 
     // Stats
-    private float _speed;
-    private float _initiative;
+    [SerializeField] private float _speed;
+    [SerializeField, Range(0, 100)] private float _initiative;
 
     // Abilities
     [SerializeField]
     private Ability[] abilityTypes;
     private LinkedList<AbilityData> _abilities;
-    public ref readonly LinkedList<AbilityData> Abilities { get { return ref _abilities; } }
+    public LinkedList<AbilityData> Abilities { get { return _abilities; } }
 
     private BattleManager _battle;
     public BattleManager battle { get { return _battle; } }
@@ -80,17 +81,16 @@ public class Combatant : MonoBehaviour
 
     public bool CanPay(Payment payment)
     {
+        Debug.LogWarning("can't pay! " + payment.resource + payment.direction + payment.type + payment.amount);
         return _GetResource(payment.resource).CanPay(payment.direction, payment.type, payment.amount);
     }
 
     public void Pay(Payment[] costs)
     {
-        Debug.Log("Pay");
         Resource.Value[] changes = new Resource.Value[Enum.GetValues(typeof(Resource.Type)).Length];
         foreach (Payment cost in costs)
         {
             changes[(int)cost.resource] += _GetResource(cost.resource).Pay(cost.direction, cost.type, cost.amount);
-            Debug.Log(changes[(int)cost.resource].amount);
         }
         for (int i = 0; i < changes.Length; i++)
         {
@@ -101,7 +101,6 @@ public class Combatant : MonoBehaviour
 
     public void Pay(Payment cost)
     {
-        Debug.Log("Pay");
         Resource.Value change = _GetResource(cost.resource).Pay(cost.direction, cost.type, cost.amount);
         _battle.EventResourceChanged(this, cost.resource, change, _GetResource(cost.resource).Get());
     }
@@ -113,8 +112,6 @@ public class Combatant : MonoBehaviour
         _readiness = new Resource(0, 100, 0);
         _health = new Resource(0, 100, 100);
         _mana = new Resource(0, 100, 100);
-        _speed = 50;
-        _initiative = 50;
 
         _abilities = new LinkedList<AbilityData>();
         foreach (Ability ability in abilityTypes)
@@ -168,7 +165,7 @@ public class Combatant : MonoBehaviour
     public void StartBattle(BattleManager battle)
     {
         _battle = battle;
-        _readiness.Set(Payment.Type.PercentOfTotal, 0.0f);
+        _readiness.Set(Payment.Type.PercentOfTotal, _initiative);
         _turn = 0;
 
         foreach (AbilityData ability in _abilities)
@@ -187,5 +184,18 @@ public class Combatant : MonoBehaviour
     {
         ++_turn;
         onTurnStarted?.Invoke();
+    }
+
+    public void ChooseRandomAbility()
+    {
+        LinkedList<AbilityData> activatedAbilities = new LinkedList<AbilityData>();
+        foreach (AbilityData ability in _abilities)
+        {
+            if (ability.isPayable)
+                activatedAbilities.AddLast(ability);
+        }
+
+        int i = UnityEngine.Random.Range(0, activatedAbilities.Count);
+        _battle.StartChoosingTarget(activatedAbilities.ElementAt(i));
     }
 }

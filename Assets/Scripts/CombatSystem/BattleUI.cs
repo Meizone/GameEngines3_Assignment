@@ -33,7 +33,6 @@ public class BattleUI : MonoBehaviour
     {
         foreach (KeyValuePair<Combatant, CombatantUI> kvp in combatantUIs)
         {
-            Debug.Log(kvp.Key.gameObject.name);
             kvp.Value.transform.position = kvp.Key.uiOffset.position;
         }
     }
@@ -130,7 +129,6 @@ public class BattleUI : MonoBehaviour
 
     private void OnResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
-        Debug.Log("BattleUI.OnResourceChanged");
         onResourceChanged?.Invoke(combatant, resource, change, final);
     }
 

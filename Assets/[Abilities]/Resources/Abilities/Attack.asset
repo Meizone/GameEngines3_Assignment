@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
-  m_Name: DoubleStrike
+  m_Name: Attack
   m_EditorClassIdentifier: 
-  description: '{0}{0}'
-  _displayName: Double Strike
+  description: 
+  _displayName: Attack
   _icon: {fileID: 0}
   _cooldown: 0
   _selectableTargets: 4
   _description: 
   _costs: []
   _triggers:
-  - _description: '{0}'
+  - _description: 
     _triggeringEvents: 2
     _possibleTargets: 8
     _maxTargets: 0
@@ -29,15 +29,6 @@ MonoBehaviour:
     _conditions: []
     _effects:
     - id: 0
-  - _description: '{0}'
-    _triggeringEvents: 2
-    _possibleTargets: 0
-    _maxTargets: 0
-    _evaluateTargets: 0
-    _evaluateConditions: 0
-    _conditions: []
-    _effects:
-    - id: 1
   references:
     version: 1
     00000000:
@@ -49,12 +40,3 @@ MonoBehaviour:
           direction: -1
           type: 0
           _amount: 10
-    00000001:
-      type: {class: PaymentEffect, ns: , asm: Assembly-CSharp}
-      data:
-        _description: 
-        payment:
-          resource: 2
-          direction: 1
-          type: 2
-          _amount: 100

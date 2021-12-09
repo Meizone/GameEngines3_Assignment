@@ -16,15 +16,16 @@ public class ResourceBar : MonoBehaviour
 
     private void Update()
     {
-        if (fill.fillAmount < value)
+        float v = value / 100;
+        if (fill.fillAmount < v)
         {
-            flasher.fillAmount = value;
-            fill.fillAmount = Mathf.MoveTowards(fill.fillAmount, value, fillSpeed * Time.deltaTime);
+            flasher.fillAmount = v;
+            fill.fillAmount = Mathf.MoveTowards(fill.fillAmount, v, fillSpeed * Time.deltaTime);
         }
-        else if (flasher.fillAmount > value)
+        else if (flasher.fillAmount > v)
         {
-            fill.fillAmount = value;
-            flasher.fillAmount = Mathf.MoveTowards(flasher.fillAmount, value, fillSpeed * Time.deltaTime);
+            fill.fillAmount = v;
+            flasher.fillAmount = Mathf.MoveTowards(flasher.fillAmount, v, fillSpeed * Time.deltaTime);
         }
     }
 }

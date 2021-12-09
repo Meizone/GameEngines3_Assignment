@@ -53,7 +53,8 @@ public class Trigger : IDescribable
     public string Description {
         get
         {
-            return string.Format(_description, _conditions.Select(c => c.Description).ToArray());
+            return _description;
+            //return string.Format(_description, _conditions.Select(c => c.Description).ToArray());
         }
     }
     

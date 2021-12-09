@@ -17,7 +17,7 @@ public class AbilityButton : MonoBehaviour
     [SerializeField] private Color disabledColour;
     private AbilityData _abilityData;
     private bool _forceInactive = false;
-    public bool ForceInactive { get { return _forceInactive; } set { _forceInactive = value; UpdateClickable(_abilityData.cooldownValue, _abilityData.cooldownPercent, _abilityData.isPayable); } }
+    public bool ForceInactive { get { return _forceInactive; } set { _forceInactive = value; if (_abilityData != null) UpdateClickable(_abilityData.cooldownValue, _abilityData.cooldownPercent, _abilityData.isPayable); } }
     #endregion
 
     #region "Public functions"
@@ -31,7 +31,7 @@ public class AbilityButton : MonoBehaviour
 
         _abilityData = abilityData;
 
-        if (_abilityData != null && _abilityData.ability.isTargetted)
+        if (_abilityData != null)
         {
             gameObject.SetActive(true);
             text.text = _abilityData.ability.displayName;
@@ -53,6 +53,12 @@ public class AbilityButton : MonoBehaviour
         ForceInactive = true;
     }
 
+    public void UpdateClickable()
+    {
+        if (_abilityData != null)
+            UpdateClickable(_abilityData.cooldownValue, _abilityData.cooldownPercent, _abilityData.isPayable);
+    }
+
     private void UpdateClickable(uint cooldownValue, float cooldownPercent, bool payable)
     {
         if (!_forceInactive && payable && cooldownPercent <= 0.0f)
@@ -62,6 +68,7 @@ public class AbilityButton : MonoBehaviour
         }
         else
         {
+            Debug.LogError("you sure?" + _forceInactive + " " + payable + " " + cooldownPercent + ".");
             button.enabled = false;
             text.color = disabledColour;
         }
