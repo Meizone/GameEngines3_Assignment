@@ -14,6 +14,13 @@ public class ResourceBar : MonoBehaviour
     public float value;
     public Color Color { get { return fill.color; } set { fill.color = value; } }
 
+    private void Awake()
+    {
+        fill.fillAmount = 0;
+        flasher.fillAmount = 0;
+        value = 100;
+    }
+
     private void Update()
     {
         float v = value / 100;

@@ -1,22 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemySpawnerScript : MonoBehaviour
 {
 
     [SerializeField]
-    List<GameObject> EnemyList;
+    List<Combatant> EnemyList;
     private BattleManager battleManager;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        Combatant combatant = Instantiate(EnemyList[0]).GetComponent<Combatant>();
+        SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
+    }
+
+    private void SceneManager_sceneUnloaded(Scene arg0)
+    {
+        Debug.Log("SceneManager_sceneUnloaded");
+        Combatant combatant = Instantiate(EnemyList[0], transform);
         battleManager = FindObjectOfType<BattleManager>();
         battleManager.AddCombatant(combatant);
     }
 
+    void Start()
+    {
+        Debug.Log("Start");
+        Combatant combatant = Instantiate(EnemyList[0], transform);
+        battleManager = FindObjectOfType<BattleManager>();
+        battleManager.AddCombatant(combatant);
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        Debug.Log("OnLevelWasLoaded");
+        Combatant combatant = Instantiate(EnemyList[0], transform);
+        battleManager = FindObjectOfType<BattleManager>();
+        battleManager.AddCombatant(combatant);
+    }
 }
 
 

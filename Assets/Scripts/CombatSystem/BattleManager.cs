@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static Resource.Type;
@@ -37,7 +38,7 @@ public class BattleManager : MonoBehaviour
     public enum ExitState { Victory, Loss, Tie }
 
     private LinkedList<Combatant> _combatants = new LinkedList<Combatant>();
-    public LinkedList<Combatant> combatants { get { return combatants; } }
+    public LinkedList<Combatant> combatants { get { return _combatants; } }
 
     private Combatant activeCombatant;
     private AbilityData activatingAbility;
@@ -129,6 +130,7 @@ public class BattleManager : MonoBehaviour
         turn = 0;
         Debug.LogFormat("<color=yellow>Exiting combat with exit state {0} has not yet been implemented.</color>", exitState);
         LevelLoader.LoadLevel(LevelLoader.previousLevel);
+        _combatants.Clear();
     }
 
     public void EventResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
@@ -141,21 +143,59 @@ public class BattleManager : MonoBehaviour
         activatingAbility = ability;
         onTargettingStarted?.Invoke(ability);
 
-        Debug.LogFormat("<color=red>Target choosing not yet implemented!");
-        switch (activatingAbility.ability.targetType)
+        Debug.Log("ability.ability.targetType" + ability.ability.targetType);
+
+        bool clear = false;
+        foreach (Combatant combatant in _combatants)
         {
-            case Ability.SelectableTargets.Ally:
-                break;
-            case Ability.SelectableTargets.Enemy:
-                break;
-            case Ability.SelectableTargets.Self:
-            default:
-                break;
+            if (combatant == null)
+            {
+                clear = true;
+                continue;
+            }
+            if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Self) && combatant == ability.combatant)
+                combatant.SetTargettable(true);
+            else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Ally) && combatant.faction == ability.combatant.faction)
+                combatant.SetTargettable(true);
+            else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Enemy) && combatant.faction != ability.combatant.faction)
+                combatant.SetTargettable(true);
+            else
+                combatant.SetTargettable(false);
+
+        }
+        if (clear)
+        {
+            _combatants.Clear();
+            foreach (Combatant combatant in FindObjectsOfType<Combatant>())
+            {
+                _combatants.AddLast(combatant);
+            }            
+        }
+    }
+
+    public void ChooseRandomTarget(AbilityData ability)
+    {
+        LinkedList<Combatant> possibleTargets = new LinkedList<Combatant>();
+        activatingAbility = ability;
+        foreach (Combatant combatant in _combatants)
+        {
+            if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Self) && combatant == ability.combatant)
+                possibleTargets.AddLast(combatant);
+            else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Ally) && combatant.faction == ability.combatant.faction)
+                possibleTargets.AddLast(combatant);
+            else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Enemy) && combatant.faction != ability.combatant.faction)
+                possibleTargets.AddLast(combatant);
         }
 
-        EventTargetChosen(activatingAbility.combatant); // This is TEMPORARY!!!!!!!!!!! The target should be chosen by the user/ai.
-        onTurnEnded?.Invoke(activeCombatant, activeCombatant.turn, turn);
-        activeCombatant = null;
+        if (possibleTargets.Count == 0)
+        {
+            EventTargetChosen(ability.combatant);
+        }
+        else
+        {
+            int i = UnityEngine.Random.Range(0, possibleTargets.Count - 1);
+            EventTargetChosen(possibleTargets.ElementAt(i));
+        }
     }
 
     public void CancelChoosingTarget()
@@ -168,5 +208,7 @@ public class BattleManager : MonoBehaviour
         if (activatingAbility != null)
             if (activatingAbility.Pay(target))
                 onAbilityActivated?.Invoke(activatingAbility, target);
+        onTurnEnded?.Invoke(activeCombatant, activeCombatant.turn, turn);
+        activeCombatant = null;
     }
 }

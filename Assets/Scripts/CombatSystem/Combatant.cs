@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Combatant : MonoBehaviour
@@ -13,12 +14,13 @@ public class Combatant : MonoBehaviour
     public event TurnStartedEvent onTurnStarted;
     public event ResourceChangedEvent onResourceValueChanged;
 
-    private uint _faction;
+    [SerializeField] private uint _faction;
     public uint faction { get { return _faction; } }
     public bool isPlayerControlled = false;
 
     // Resources
     [SerializeField] public Transform uiOffset;
+    private Collider2D selectionBox;
     [SerializeField] private Resource _aether = new Resource(0, 100, 0);
     [SerializeField] private Resource _readiness = new Resource(0, 100, 0);
     [SerializeField] private Resource _health = new Resource(0, 100, 100);
@@ -107,6 +109,8 @@ public class Combatant : MonoBehaviour
 
     private void Awake()
     {
+        selectionBox = GetComponent<Collider2D>();
+
         _aether = new Resource(0, 100, 0);
         _readiness = new Resource(0, 100, 0);
         _health = new Resource(0, 100, 100);
@@ -171,6 +175,43 @@ public class Combatant : MonoBehaviour
             ability.Register(onTurnStarted);
     }
 
+    public void SetTargettable(bool value)
+    {
+        Debug.Log(gameObject.name + "has selectable set to" + value + "!");
+        selectionBox.enabled = value;
+    }
+
+    private void OnMouseDown()
+    {
+        Debug.Log("Mouse down!");
+        if (!selectionBox.enabled)
+            return;
+
+    }
+
+    private void Update()
+    {
+        if (Mouse.current.leftButton.IsActuated())
+        {
+            //Debug.Log(Time.time+ "actuated!");
+            //Debug.Log(Time.time+ "mp" + Mouse.current.position.ReadValue());
+            //Vector2 mp = Mouse.current.position.ReadValue();
+            //Vector3 mp3 = new Vector3(mp.x, mp.y, 20);
+            //Debug.Log(Time.time+ "wp" + Camera.current.ScreenToWorldPoint(mp3));
+        
+            RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, 100);
+            foreach (RaycastHit2D hit in hits)
+            {
+                Debug.Log("hit!");
+        
+                if (hit.collider.gameObject == gameObject)
+                {
+                    Debug.Log("Mouse down!" + hit.collider.gameObject.name);
+                }
+            }
+        }
+    }
+
     public void UpdateReadiness(float speedScale)
     {
         Resource.Value change = _readiness.Pay(Payment.Direction.Credit, Payment.Type.Value, _speed * Time.deltaTime * speedScale);
@@ -194,7 +235,12 @@ public class Combatant : MonoBehaviour
                 activatedAbilities.AddLast(ability);
         }
 
-        int i = UnityEngine.Random.Range(0, activatedAbilities.Count);
-        _battle.StartChoosingTarget(activatedAbilities.ElementAt(i));
+        int i = UnityEngine.Random.Range(0, activatedAbilities.Count - 1);
+        _battle.ChooseRandomTarget(activatedAbilities.ElementAt(i));
+    }
+
+    private void OnDestroy()
+    {
+        Debug.LogError(gameObject.name + " was destroyed prematurely!");
     }
 }
