@@ -32,6 +32,8 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     private LevelMetaData sceneMetaData;
     [SerializeField]
     private static bool previousBattle = true;
+    [SerializeField]
+    private bool inBattle = false;
 
 
     [Header("Ground Checking")]
@@ -74,7 +76,10 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
 
     private void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+        if(!inBattle)
+            moveInput = value.Get<Vector2>();
+        else
+            moveInput = new Vector2(0f,0f);
     }
 
     // Check if the value of isJump is not equal to 0, If true return true, if not, return false.
@@ -88,6 +93,7 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     void Update()
     {
         currentState.StateUpdate(this);
+        Debug.Log(previousBattle);
     }
 
     void FixedUpdate()
@@ -119,12 +125,15 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        if (col.gameObject.tag == "Encounter")
+        {
 
-        if(EncounterGenerator != null)
-            StopCoroutine(EncounterGenerator);
+            if(EncounterGenerator != null)
+                StopCoroutine(EncounterGenerator);
 
-        EncounterGenerator = EncounterCheck();
-        StartCoroutine(EncounterGenerator);
+            EncounterGenerator = EncounterCheck();
+            StartCoroutine(EncounterGenerator);
+        }
 
         // Prelimenary, StartCoroutine to loop a random number generator
         // If number is below a certain threshhold (Set in Player) The player
@@ -134,12 +143,14 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        StopCoroutine(EncounterGenerator);
-
-        // Previous Battle is a static bool to check if the player was previously in a battle or not.
-        previousBattle = true;
-        // Prelimenary, StopCoroutine of Looping Random Number Generator
-        // Will stop the generation of Encounters
+        if(col.gameObject.tag == "Encounter")
+        {
+            StopCoroutine(EncounterGenerator);
+            // Previous Battle is a static bool to check if the player was previously in a battle or not.
+            previousBattle = true;
+            // Prelimenary, StopCoroutine of Looping Random Number Generator
+            // Will stop the generation of Encounters
+        }
     }
 
 
@@ -158,6 +169,7 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
                     LevelLoader.LoadLevel(sceneMetaData);
                     Debug.Log("Battle!");
                     previousBattle = false;
+                    inBattle = true;
                     break;
                 }
                 yield return new WaitForSeconds(1.0f);
