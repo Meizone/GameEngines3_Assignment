@@ -12,8 +12,9 @@ public class EnemySpawnerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(EnemyList[0]);
+        Combatant combatant = Instantiate(EnemyList[0]).GetComponent<Combatant>();
         battleManager = FindObjectOfType<BattleManager>();
+        battleManager.AddCombatant(combatant);
     }
 
 }
