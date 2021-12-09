@@ -246,8 +246,28 @@ public class Trigger : IDescribable
         }
     }
 
+    /// <summary>
+    /// Activate a particular trigger.
+    /// </summary>
+    /// <param name="callingAbility">The ability that is immediately responding to the causing event. Cannot be null.</param>
+    /// <param name="activatedAbility">The ability whose casting triggered the event to happen. Cannot be null.</param>
+    /// <param name="target">The target that was selected by the player/ai when casting the activated ability. Cannot be null.</param>
     private void Activate(AbilityData callingAbility, AbilityData activatedAbility, Combatant target)
     {
+        if (callingAbility == null || callingAbility.combatant == null || callingAbility.ability == null || 
+            activatedAbility == null || activatedAbility.combatant == null || activatedAbility.ability == null ||
+            target == null)
+        {
+            return;
+        }
+
+        if (callingAbility != activatedAbility)
+            return; // FOR NOW
+
+        //Debug.Log(Time.time + "Ability Activated, called by: " + callingAbility.ability.name);
+        //Debug.Log(Time.time + "by " + callingAbility.combatant.name);
+        //Debug.Log(Time.time + "Activated by: " + activatedAbility.ability.name);
+        //Debug.Log(Time.time + "targetting " + target.name + ".");
         if (callingAbility.combatant != activatedAbility.combatant)
             return;
         /// There should be logic in here to assess, like, what happens if the ability being activated isn't this one?

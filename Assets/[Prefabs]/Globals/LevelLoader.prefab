@@ -302,7 +302,7 @@ MonoBehaviour:
   loadingText: {fileID: 8470408542936125374}
   loadingImage: {fileID: 8411353260758873061}
   animator: {fileID: 7634013738332460760}
-  transitionTime: 5
+  transitionTime: 2
 --- !u!1 &8592575409360148891
 GameObject:
   m_ObjectHideFlags: 0
