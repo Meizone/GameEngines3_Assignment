@@ -68,7 +68,6 @@ public class AbilityButton : MonoBehaviour
         }
         else
         {
-            Debug.LogError("you sure?" + _forceInactive + " " + payable + " " + cooldownPercent + ".");
             button.enabled = false;
             text.color = disabledColour;
         }

@@ -81,7 +81,6 @@ public class Combatant : MonoBehaviour
 
     public bool CanPay(Payment payment)
     {
-        Debug.LogWarning("can't pay! " + payment.resource + payment.direction + payment.type + payment.amount);
         return _GetResource(payment.resource).CanPay(payment.direction, payment.type, payment.amount);
     }
 
