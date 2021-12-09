@@ -298,6 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73298451ecc67f74db4569d1a3029a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultLevel: {fileID: 11400000, guid: 1ef37b457f1f9c14eb2065b0f9716350, type: 2}
   loadingText: {fileID: 8470408542936125374}
   loadingImage: {fileID: 8411353260758873061}
   animator: {fileID: 7634013738332460760}

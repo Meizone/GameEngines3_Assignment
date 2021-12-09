@@ -100,7 +100,9 @@ public class BattleManager : MonoBehaviour
 
     private void StartTurn(Combatant combatant)
     {
-        Debug.Log("BattleManager.StartTurn for " + combatant.gameObject.name + ".");
+        if (combatant == null || combatant.gameObject == null || !combatant.gameObject.activeInHierarchy)
+            return;
+
         ++turn;
         activeCombatant = combatant;
         onBeforeTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
@@ -126,6 +128,7 @@ public class BattleManager : MonoBehaviour
     {
         turn = 0;
         Debug.LogFormat("<color=yellow>Exiting combat with exit state {0} has not yet been implemented.</color>", exitState);
+        LevelLoader.LoadLevel(LevelLoader.previousLevel);
     }
 
     public void EventResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)

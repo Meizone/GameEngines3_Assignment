@@ -17,13 +17,18 @@ public class GroundedState : BaseState
 
     public override void StateFixedUpdate(PlayerBehaviourStateMachine state, Vector2 moveInput, RaycastHit2D ground, ref int direction, playerStruct player, ref bool isGrounded , ref bool isJump)
     {
+        if (ground.collider == null)
+        {
+            state.StateSwitch(state.idleState);
+            return;
+        }
+
         // State Switching
         if (!player.animator.GetBool("isRun"))
         {
             state.StateSwitch(state.idleState);
         }
 
-            
         player.rigidbody.drag = ground.collider.friction * player.groundFrictionDragMultiplier;
         float moddedMoveSpeed = player.moveSpeed * (1 + player.rigidbody.drag * 0.1f);
         float moddedAcceleration = player.acceleration * (1 + player.rigidbody.drag * 0.1f);

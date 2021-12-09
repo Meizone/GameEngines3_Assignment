@@ -18,7 +18,11 @@ MonoBehaviour:
   _cooldown: 0
   _selectableTargets: 4
   _description: 
-  _costs: []
+  _costs:
+  - resource: 2
+    direction: -1
+    type: 1
+    _amount: 100
   _triggers:
   - _description: 
     _triggeringEvents: 2

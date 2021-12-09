@@ -121,6 +121,8 @@ public class Trigger : IDescribable
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.AbilityActivated))
             return false;
+
+        Activate(callingAbility, activatedAbility, target);
         return true;
 ;    }
 
@@ -128,6 +130,7 @@ public class Trigger : IDescribable
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.ResourceChanged))
             return false;
+        
         return true;
     }
 
@@ -135,6 +138,7 @@ public class Trigger : IDescribable
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.BattleStarted))
             return false;
+
         return true;
     }
 
@@ -142,18 +146,21 @@ public class Trigger : IDescribable
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.TurnPreStart))
             return false;
+
         return true;
     }
     private bool OnTurnStarted(AbilityData callingAbility, Combatant combatant, uint turn, uint turnInBattle)
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.TurnStarted))
             return false;
+
         return true;
     }
     private bool OnTurnEnded(AbilityData callingAbility, Combatant combatant, uint turn, uint turnInBattle)
     {
         if (!_triggeringEvents.HasFlag(BattleManager.Events.TurnEnded))
             return false;
+
         return true;
     }
     #endregion

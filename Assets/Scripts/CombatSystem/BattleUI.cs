@@ -33,6 +33,16 @@ public class BattleUI : MonoBehaviour
     {
         foreach (KeyValuePair<Combatant, CombatantUI> kvp in combatantUIs)
         {
+            if (kvp.Key == null)
+            {
+                ReturnCombatantUI(kvp.Value);
+                continue;
+            }
+            if (kvp.Value == null)
+            {
+                OnCombatantAdded(kvp.Key);
+            }
+
             kvp.Value.transform.position = kvp.Key.uiOffset.position;
         }
     }
@@ -145,7 +155,8 @@ public class BattleUI : MonoBehaviour
     private void ReturnCombatantUI(CombatantUI ui)
     {
         ui.gameObject.SetActive(false);
-        uiPool.Enqueue(ui);
+        if (!uiPool.Contains(ui))
+            uiPool.Enqueue(ui);
     }
 
     public ref readonly Combatant GetActiveCombatant()
