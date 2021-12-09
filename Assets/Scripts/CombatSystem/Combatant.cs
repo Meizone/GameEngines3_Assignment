@@ -181,32 +181,23 @@ public class Combatant : MonoBehaviour
         selectionBox.enabled = value;
     }
 
-    private void OnMouseDown()
-    {
-        Debug.Log("Mouse down!");
-        if (!selectionBox.enabled)
-            return;
-
-    }
-
     private void Update()
     {
         if (Mouse.current.leftButton.IsActuated())
         {
-            //Debug.Log(Time.time+ "actuated!");
-            //Debug.Log(Time.time+ "mp" + Mouse.current.position.ReadValue());
-            //Vector2 mp = Mouse.current.position.ReadValue();
-            //Vector3 mp3 = new Vector3(mp.x, mp.y, 20);
-            //Debug.Log(Time.time+ "wp" + Camera.current.ScreenToWorldPoint(mp3));
-        
-            RaycastHit2D[] hits = Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), Vector2.zero, 100);
-            foreach (RaycastHit2D hit in hits)
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+            RaycastHit2D hit2D = Physics2D.GetRayIntersection(ray);
+            if (hit2D.collider != null && hit2D.collider.enabled == true)
             {
-                Debug.Log("hit!");
-        
-                if (hit.collider.gameObject == gameObject)
+                if (battle.isTargetting)
                 {
-                    Debug.Log("Mouse down!" + hit.collider.gameObject.name);
+                    Combatant combatant = hit2D.collider.GetComponent<Combatant>();
+                    if (combatant)
+                    {
+                        Debug.Log("Mouse.current.leftButton.IsActuated() " + combatant.gameObject.name);
+                        battle.EventTargetChosen(combatant);
+                    }
                 }
             }
         }

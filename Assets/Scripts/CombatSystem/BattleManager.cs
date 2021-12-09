@@ -45,6 +45,7 @@ public class BattleManager : MonoBehaviour
     private float waitingSpeedScale = 1.0f;
     private float activeSpeedScale = 0.0f;
     private uint turn;
+    public bool isTargetting { get; private set; } = false;
 
     private void Start()
     {
@@ -140,6 +141,7 @@ public class BattleManager : MonoBehaviour
 
     public void StartChoosingTarget(AbilityData ability)
     {
+        isTargetting = true;
         activatingAbility = ability;
         onTargettingStarted?.Invoke(ability);
 
@@ -196,19 +198,24 @@ public class BattleManager : MonoBehaviour
             int i = UnityEngine.Random.Range(0, possibleTargets.Count - 1);
             EventTargetChosen(possibleTargets.ElementAt(i));
         }
+        isTargetting = false;
     }
 
     public void CancelChoosingTarget()
     {
         activatingAbility = null;
+        isTargetting = false;
     }
 
     public void EventTargetChosen(Combatant target)
     {
+        Debug.Log("EventTargetChosen" + target.gameObject.name);
+
         if (activatingAbility != null)
             if (activatingAbility.Pay(target))
                 onAbilityActivated?.Invoke(activatingAbility, target);
         onTurnEnded?.Invoke(activeCombatant, activeCombatant.turn, turn);
         activeCombatant = null;
+        isTargetting = false;
     }
 }

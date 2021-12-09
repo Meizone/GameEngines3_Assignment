@@ -27,6 +27,7 @@ public class BattleUI : MonoBehaviour
     private void Start()
     {
         SetBattle(FindObjectOfType<BattleManager>());
+        canvas.worldCamera = Camera.main;
     }
 
     private void FixedUpdate()
