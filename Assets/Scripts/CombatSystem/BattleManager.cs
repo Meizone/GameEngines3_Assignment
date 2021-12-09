@@ -9,13 +9,14 @@ public class BattleManager : MonoBehaviour
 {
     #region "Delegates, events, related things"
     public delegate void CombatantChangedEvent(Combatant combatant);
-    public delegate void TargettingStartedEvent(AbilityData ability);
+    public delegate void TargettingEvent(AbilityData ability);
     public delegate void AbilityActivatedEvent(AbilityData activatedAbility, Combatant target);
     public delegate void ResourceChangedEvent(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final);
     public delegate void TurnChangedEvent(Combatant combatant, uint turn, uint turnInBattle);
     public event CombatantChangedEvent onCombatantAdded;
     public event CombatantChangedEvent onCombatantRemoved;
-    public event TargettingStartedEvent onTargettingStarted;
+    public event TargettingEvent onTargettingStarted;
+    public event TargettingEvent onTargettingCancelled;
     public event AbilityActivatedEvent onAbilityActivated;
     public event ResourceChangedEvent onResourceChanged;
     public event TurnChangedEvent onBattleStarted;
@@ -35,7 +36,7 @@ public class BattleManager : MonoBehaviour
     #endregion
     public enum ExitState { Victory, Loss, Tie }
 
-    private LinkedList<Combatant> _combatants;
+    private LinkedList<Combatant> _combatants = new LinkedList<Combatant>();
     public LinkedList<Combatant> combatants { get { return combatants; } }
 
     private Combatant activeCombatant;
@@ -44,9 +45,9 @@ public class BattleManager : MonoBehaviour
     private float activeSpeedScale = 0.0f;
     private uint turn;
 
-    private void Awake()
+    private void Start()
     {
-        _combatants = new LinkedList<Combatant>();
+        StartBattle(FindObjectsOfType<Combatant>());
     }
 
     public void StartBattle(IEnumerable<Combatant> combatants)
@@ -71,6 +72,7 @@ public class BattleManager : MonoBehaviour
 
     public void AddCombatant(Combatant combatant)
     {
+        Debug.Log("BattleManager.AddCombatant");
         _combatants.AddLast(combatant);
         combatant.StartBattle(this);
         onCombatantAdded?.Invoke(combatant);
@@ -78,7 +80,7 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
-        float speedScale = activeCombatant == null ? waitingSpeedScale : activeSpeedScale;
+        float scaledSpeed = activeCombatant == null ? waitingSpeedScale : activeSpeedScale;
 
         if (_combatants.Count <= 0)
             return;
@@ -86,12 +88,12 @@ public class BattleManager : MonoBehaviour
         Combatant mostReady = _combatants.First.Value;
         foreach (Combatant combatant in _combatants)
         {
-            combatant.UpdateReadiness(speedScale);
+            combatant.UpdateReadiness(scaledSpeed);
             if (combatant.readiness > mostReady.readiness)
                 mostReady = combatant;
         }
 
-        if (mostReady.readiness > 100)
+        if (activeCombatant == null && mostReady.readiness > 100)
         {
             StartTurn(mostReady);
         }
@@ -99,6 +101,7 @@ public class BattleManager : MonoBehaviour
 
     private void StartTurn(Combatant combatant)
     {
+        Debug.Log("BattleManager.StartTurn for " + combatant.gameObject.name + ".");
         ++turn;
         activeCombatant = combatant;
         onBeforeTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
@@ -124,6 +127,7 @@ public class BattleManager : MonoBehaviour
 
     public void EventResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
+        Debug.Log("BattleManager.EventResourceChanged " + resource + " " + final.amount + ".");
         onResourceChanged?.Invoke(combatant, resource, change, final);
     }
 

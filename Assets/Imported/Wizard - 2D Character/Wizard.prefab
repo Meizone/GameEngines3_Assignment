@@ -95,23 +95,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a483bb9cd5c7a8f46ab51f5e5528d92c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayerControlled: 0
   uiOffset: {fileID: 1667224252}
   _aether:
     _current: 0
     _min: 0
-    _max: 0
+    _max: 100
   _readiness:
     _current: 0
     _min: 0
-    _max: 0
+    _max: 100
   _health:
-    _current: 0
+    _current: 100
     _min: 0
-    _max: 0
+    _max: 100
   _mana:
-    _current: 0
+    _current: 100
     _min: 0
-    _max: 0
+    _max: 100
 --- !u!1001 &4105362946132217688
 PrefabInstance:
   m_ObjectHideFlags: 0

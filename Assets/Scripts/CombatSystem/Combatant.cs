@@ -14,6 +14,7 @@ public class Combatant : MonoBehaviour
 
     private uint _faction;
     public uint faction { get { return _faction; } }
+    public bool isPlayerControlled = false;
 
     // Resources
     [SerializeField] public Transform uiOffset;
@@ -32,7 +33,10 @@ public class Combatant : MonoBehaviour
     private float _initiative;
 
     // Abilities
-    private AbilityData[] _abilities;
+    [SerializeField]
+    private Ability[] abilityTypes;
+    private LinkedList<AbilityData> _abilities;
+    public ref readonly LinkedList<AbilityData> Abilities { get { return ref _abilities; } }
 
     private BattleManager _battle;
     public BattleManager battle { get { return _battle; } }
@@ -81,6 +85,7 @@ public class Combatant : MonoBehaviour
 
     public void Pay(Payment[] costs)
     {
+        Debug.Log("Pay");
         Resource.Value[] changes = new Resource.Value[Enum.GetValues(typeof(Resource.Type)).Length];
         foreach (Payment cost in costs)
         {
@@ -96,12 +101,13 @@ public class Combatant : MonoBehaviour
 
     public void Pay(Payment cost)
     {
+        Debug.Log("Pay");
         Resource.Value change = _GetResource(cost.resource).Pay(cost.direction, cost.type, cost.amount);
         _battle.EventResourceChanged(this, cost.resource, change, _GetResource(cost.resource).Get());
     }
     #endregion
 
-    private void Start()
+    private void Awake()
     {
         _aether = new Resource(0, 100, 0);
         _readiness = new Resource(0, 100, 0);
@@ -109,6 +115,12 @@ public class Combatant : MonoBehaviour
         _mana = new Resource(0, 100, 100);
         _speed = 50;
         _initiative = 50;
+
+        _abilities = new LinkedList<AbilityData>();
+        foreach (Ability ability in abilityTypes)
+        {
+            AddAbility(ability);
+        }
     }
 
     private void OnEnable()
@@ -146,6 +158,13 @@ public class Combatant : MonoBehaviour
         onResourceValueChanged?.Invoke(Resource.Type.Health, value, percent);
     }
 
+    public void AddAbility(Ability ability)
+    {
+        if (_abilities == null)
+            _abilities = new LinkedList<AbilityData>();
+        _abilities.AddLast(new AbilityData(this, ability));
+    }
+
     public void StartBattle(BattleManager battle)
     {
         _battle = battle;
@@ -158,7 +177,10 @@ public class Combatant : MonoBehaviour
 
     public void UpdateReadiness(float speedScale)
     {
-        _readiness.Pay(Payment.Direction.Credit, Payment.Type.Value, _speed * Time.deltaTime * speedScale);
+        Resource.Value change = _readiness.Pay(Payment.Direction.Credit, Payment.Type.Value, _speed * Time.deltaTime * speedScale);
+        if (change.amount != 0)
+            _battle.EventResourceChanged(this, Resource.Type.Readiness, change, _readiness.value);
+
     }
 
     public void StartTurn()

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4383929ea93c6d4989481ed77a0deaa, type: 3}
   m_Name: DefaultSettings
   m_EditorClassIdentifier: 
-  activeSelectionColour: {r: 0, g: 1, b: 1, a: 0}
+  activeSelectionColour: {r: 0, g: 1, b: 1, a: 0.7529412}
   inactiveSelectionColour: {r: 1, g: 1, b: 1, a: 0.1254902}
-  allySelectionColour: {r: 0, g: 1, b: 0, a: 0}
-  enemySelectionColour: {r: 1, g: 0, b: 0, a: 0}
-  aetherResourceColour: {r: 0.5019608, g: 0.5019608, b: 1, a: 0}
-  readinessResourceColour: {r: 0.7529412, g: 1, b: 0.5019608, a: 0}
-  healthResourceColour: {r: 0, g: 1, b: 0, a: 0}
-  manaResourceColour: {r: 0, g: 0, b: 1, a: 0}
+  allySelectionColour: {r: 0, g: 1, b: 0, a: 0.7529412}
+  enemySelectionColour: {r: 1, g: 0, b: 0, a: 0.7529412}
+  aetherResourceColour: {r: 0.5019608, g: 0.5019608, b: 1, a: 0.7529412}
+  readinessResourceColour: {r: 0.7529412, g: 1, b: 0.5019608, a: 0.7529412}
+  healthResourceColour: {r: 0, g: 1, b: 0, a: 0.7529412}
+  manaResourceColour: {r: 0, g: 0, b: 1, a: 0.7529412}

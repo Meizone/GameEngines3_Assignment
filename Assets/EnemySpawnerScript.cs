@@ -7,11 +7,13 @@ public class EnemySpawnerScript : MonoBehaviour
 
     [SerializeField]
     List<GameObject> EnemyList;
+    private BattleManager battleManager;
 
     // Start is called before the first frame update
     void Start()
     {
         Instantiate(EnemyList[0]);
+        battleManager = FindObjectOfType<BattleManager>();
     }
 
 }

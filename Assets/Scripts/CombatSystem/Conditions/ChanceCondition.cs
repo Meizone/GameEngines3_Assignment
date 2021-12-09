@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[System.Serializable, CreateAssetMenu(fileName = "ChanceCondition", menuName = "Abilities/Conditions/ChanceCondition")]
+//[System.Serializable, CreateAssetMenu(fileName = "ChanceCondition", menuName = "Abilities/Conditions/ChanceCondition")]
 public class ChanceCondition : Condition
 {
     [Range(0, 100)] public float chance;

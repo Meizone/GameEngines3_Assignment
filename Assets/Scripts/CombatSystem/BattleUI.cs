@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleUI : MonoBehaviour
 {
-    public event BattleManager.TargettingStartedEvent onTargettingStarted;
+    public event BattleManager.TargettingEvent onTargettingStarted;
+    public event BattleManager.TargettingEvent onTargettingCancelled;
     public event BattleManager.AbilityActivatedEvent onAbilityActivated;
     public event BattleManager.ResourceChangedEvent onResourceChanged;
     public event BattleManager.TurnChangedEvent onTurnStarted;
@@ -18,7 +20,23 @@ public class BattleUI : MonoBehaviour
     private CombatantUI combatantUIPrefab;
     [SerializeField]
     private Queue<CombatantUI> uiPool = new Queue<CombatantUI>();
-    private Dictionary<Combatant, CombatantUI> combatantUIs;
+    private Dictionary<Combatant, CombatantUI> combatantUIs = new Dictionary<Combatant, CombatantUI>();
+    [SerializeField]
+    private AbilityBar abilityBar;
+
+    private void Start()
+    {
+        SetBattle(FindObjectOfType<BattleManager>());
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (KeyValuePair<Combatant, CombatantUI> kvp in combatantUIs)
+        {
+            Debug.Log(kvp.Key.gameObject.name);
+            kvp.Value.transform.position = kvp.Key.uiOffset.position;
+        }
+    }
 
     public void SetBattle(BattleManager battle)
     {
@@ -28,6 +46,7 @@ public class BattleUI : MonoBehaviour
         }
         this.battle = battle;
         Register();
+        abilityBar.SetBattle(battle);
     }
 
     private void OnEnable()
@@ -42,28 +61,37 @@ public class BattleUI : MonoBehaviour
 
     private void Register()
     {
+        if (battle == null)
+            return;
+
         battle.onCombatantAdded += OnCombatantAdded;
         battle.onCombatantRemoved += OnCombatantRemoved;
         battle.onTurnStarted += OnTurnStarted;
         battle.onTurnEnded += OnTurnEnded;
         battle.onTargettingStarted += OnTargettingStarted;
+        battle.onTargettingCancelled += OnTargettingCancelled;
         battle.onAbilityActivated += OnAbilityActivated;
         battle.onResourceChanged += OnResourceChanged;
     }
 
     private void Deregister()
     {
+        if (battle == null)
+            return;
+
         battle.onCombatantAdded -= OnCombatantAdded;
         battle.onCombatantRemoved -= OnCombatantRemoved;
         battle.onTurnStarted -= OnTurnStarted;
         battle.onTurnEnded -= OnTurnEnded;
         battle.onTargettingStarted -= OnTargettingStarted;
+        battle.onTargettingCancelled -= OnTargettingCancelled;
         battle.onAbilityActivated -= OnAbilityActivated;
         battle.onResourceChanged -= OnResourceChanged;
     }
 
     private void OnCombatantAdded(Combatant combatant)
     {
+        Debug.Log("BattleUI.OnCombatantAdded");
         CombatantUI ui = GetCombatantUI();
         combatantUIs[combatant] = ui;
         ui.Init(this, settings, combatant);
@@ -90,6 +118,11 @@ public class BattleUI : MonoBehaviour
         onTargettingStarted?.Invoke(ability);
     }
 
+    private void OnTargettingCancelled(AbilityData ability)
+    {
+        onTargettingCancelled?.Invoke(ability);
+    }
+
     private void OnAbilityActivated(AbilityData activatedAbility, Combatant target)
     {
         onAbilityActivated?.Invoke(activatedAbility, target);
@@ -97,6 +130,7 @@ public class BattleUI : MonoBehaviour
 
     private void OnResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
+        Debug.Log("BattleUI.OnResourceChanged");
         onResourceChanged?.Invoke(combatant, resource, change, final);
     }
 

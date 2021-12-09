@@ -20,8 +20,8 @@ public class CombatantUI : MonoBehaviour
     public void Init(BattleUI battleUI, Settings settings, Combatant combatant)
     {
         SetSettings(settings);
-        SetCombatant(combatant);
         SetBattleUI(battleUI);
+        SetCombatant(combatant);
     }
 
     public void SetCombatant(Combatant value)
@@ -64,6 +64,9 @@ public class CombatantUI : MonoBehaviour
 
     private void Register()
     {
+        if (battleUI == null)
+            return;
+
         battleUI.onTurnStarted += OnTurnStarted;
         battleUI.onTurnEnded += OnTurnEnded;
         battleUI.onTargettingStarted += OnTargettingStarted;
@@ -73,6 +76,9 @@ public class CombatantUI : MonoBehaviour
 
     private void Deregister()
     {
+        if (battleUI == null)
+            return;
+
         battleUI.onTurnStarted -= OnTurnStarted;
         battleUI.onTurnEnded -= OnTurnEnded;
         battleUI.onTargettingStarted -= OnTargettingStarted;
@@ -103,6 +109,7 @@ public class CombatantUI : MonoBehaviour
 
     private void OnResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
     {
+        Debug.Log("CombatantUI.OnResourceChanged for " + combatant.gameObject.name + "'s " + resource + ".");
         switch (resource)
         {
             case Resource.Type.Health:

@@ -28,7 +28,8 @@ MonoBehaviour:
     _evaluateConditions: 0
     _conditions:
     - id: 0
-    _effects: []
+    _effects:
+    - id: 1
   references:
     version: 1
     00000000:
@@ -39,3 +40,12 @@ MonoBehaviour:
         query: 0
         binaryPredicate: 0
         amount: 0
+    00000001:
+      type: {class: PaymentEffect, ns: , asm: Assembly-CSharp}
+      data:
+        _description: 
+        payment:
+          resource: 2
+          direction: 1
+          type: 2
+          _amount: 100

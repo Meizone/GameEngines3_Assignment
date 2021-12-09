@@ -23,6 +23,7 @@ public class Resource
     public float current { get { return _current; } }
     public float percent { get { return 100.0f * ((_current - _min) / (_max - _min)); } }
     public float range { get { return _max - _min; } }
+    public Value value { get { return Get(); } }
 
     public Resource(float min, float max, float current)
     {
@@ -85,7 +86,6 @@ public class Resource
                 return _min + amount * percent * range;
             case Payment.Type.PercentOfTotal:
                 amount *= 0.01f;
-                Debug.Log(amount);
                 return _current + amount * (_max - _min);
             default:
                 Debug.LogErrorFormat("<color=red>Attempting to process payment of unknown type.</color>");

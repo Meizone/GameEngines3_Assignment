@@ -53,7 +53,6 @@ public class Trigger : IDescribable
     public string Description {
         get
         {
-            Debug.Log(_conditions[0].Description);
             return string.Format(_description, _conditions.Select(c => c.Description).ToArray());
         }
     }
@@ -64,7 +63,22 @@ public class Trigger : IDescribable
     #region "Public functions"
     public void Register(AbilityData callingAbility)
     {
-        UnityEngine.UI.Button b;
+        if (callingAbility == null)
+        {
+            Debug.LogError("CallingAbility was null.");
+            return;
+        }
+        if (callingAbility.combatant == null)
+        {
+            Debug.LogError("Combatant was null.");
+            return;
+        }
+        if (callingAbility.combatant.battle == null)
+        {
+            Debug.LogError("Battle was null.");
+            return;
+        }
+
         BattleManager battle = callingAbility.combatant.battle;
         battle.onAbilityActivated += (activatedAbility, target) => OnAbilityActivated(callingAbility, activatedAbility, target);
         battle.onResourceChanged += (combatant, resource, change, final) => OnResourceChanged(callingAbility, combatant, resource, change, final);
@@ -75,6 +89,22 @@ public class Trigger : IDescribable
     }
     public void Deregister(AbilityData callingAbility)
     {
+        if (callingAbility == null)
+        {
+            Debug.LogError("CallingAbility was null.");
+            return;
+        }
+        if (callingAbility.combatant == null)
+        {
+            Debug.LogError("Combatant was null.");
+            return;
+        }
+        if (callingAbility.combatant.battle == null)
+        {
+            Debug.LogError("Battle was null.");
+            return;
+        }
+
         BattleManager battle = callingAbility.combatant.battle;
         battle.onAbilityActivated -= (activatedAbility, target) => OnAbilityActivated(callingAbility, activatedAbility, target);
         battle.onResourceChanged -= (combatant, resource, change, final) => OnResourceChanged(callingAbility, combatant, resource, change, final);

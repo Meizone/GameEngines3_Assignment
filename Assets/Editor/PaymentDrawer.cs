@@ -28,9 +28,12 @@ public class PaymentDrawer : PropertyDrawer
         }
         else
         {
+            //EditorGUI.MultiPropertyField(new Rect(position.x, position.y + lineHeight, position.width, lineHeight),
+            //    new GUIContent[] { new GUIContent(""), new GUIContent(""), new GUIContent("") },
+            //    property.FindPropertyRelative("direction"), new GUIContent("Amount"));
             EditorGUI.MultiPropertyField(new Rect(position.x, position.y + lineHeight, position.width, lineHeight),
                 new GUIContent[] { new GUIContent(""), new GUIContent(""), new GUIContent("") },
-                property.FindPropertyRelative("direction"), new GUIContent("Amount"));
+                property.FindPropertyRelative("direction"));
         }
 
         EditorGUI.indentLevel = indent;

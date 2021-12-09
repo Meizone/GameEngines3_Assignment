@@ -7,12 +7,17 @@ using System;
 
 public class AbilityButton : MonoBehaviour
 {
+    public delegate void ChooseTargetEventHandler(AbilityData ability);
+    public event ChooseTargetEventHandler onChooseTarget;
+
     #region "Member variables and properties"
     [SerializeField] private Image cooldownImage;
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Color disabledColour;
     private AbilityData _abilityData;
+    private bool _forceInactive = false;
+    public bool ForceInactive { get { return _forceInactive; } set { _forceInactive = value; UpdateClickable(_abilityData.cooldownValue, _abilityData.cooldownPercent, _abilityData.isPayable); } }
     #endregion
 
     #region "Public functions"
@@ -43,12 +48,14 @@ public class AbilityButton : MonoBehaviour
     #region "Private functions"
     private void ChooseTarget()
     {
-
+        onChooseTarget?.Invoke(_abilityData);
+        _abilityData.combatant.battle.StartChoosingTarget(_abilityData);
+        ForceInactive = true;
     }
 
     private void UpdateClickable(uint cooldownValue, float cooldownPercent, bool payable)
     {
-        if (payable && cooldownPercent <= 0.0f)
+        if (!_forceInactive && payable && cooldownPercent <= 0.0f)
         {
             button.enabled = true;
             text.color = Color.white;

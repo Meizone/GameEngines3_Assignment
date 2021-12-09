@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[System.Serializable, CreateAssetMenu(fileName = "ResourceCondition", menuName = "Abilities/Conditions/ResourceCondition")]
+//[System.Serializable, CreateAssetMenu(fileName = "ResourceCondition", menuName = "Abilities/Conditions/ResourceCondition")]
 public class ResourceCondition : Condition
 {
     public Resource.Type resource;

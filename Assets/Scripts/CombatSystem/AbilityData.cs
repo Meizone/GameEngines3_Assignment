@@ -17,14 +17,28 @@ public class AbilityData
     [SerializeField] private Ability _ability;
     private Combatant _combatant;
 
-    public Ability ability { get { return _ability; } }
+    public Ability ability { get { return _ability; }
+        set
+        {
+            _ability = value;
+            onAvailabilityChanged?.Invoke(_cooldown, cooldownPercent, isPayable);
+        }
+    }
     public Combatant combatant { get { return _combatant; } }
     public bool isPayable { get { return _cooldown == 0 && _combatant.CanPay(ability.costs); } }
     public bool isTargetted { get { return _ability.isTargetted; } }
-    public float cooldownPercent { get { return _cooldown / ability.cooldown; } }
+    public uint cooldownValue { get { return _cooldown; } }
+    public float cooldownPercent { get { return Mathf.Clamp(_cooldown / ability.cooldown, 0, 1); } }
     #endregion
 
     #region "Public functions"
+    public AbilityData(Combatant combatant, Ability ability)
+    {
+        _combatant = combatant;
+        _ability = ability;
+        _cooldown = 0;
+    }
+
     public bool Pay(Combatant target)
     {
         _combatant.Pay(ability.costs);

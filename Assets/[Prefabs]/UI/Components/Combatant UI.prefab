@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 8160872163748974587}
   - component: {fileID: 8160872163748974581}
   m_Layer: 0
-  m_Name: CombatantUI
+  m_Name: Combatant UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
