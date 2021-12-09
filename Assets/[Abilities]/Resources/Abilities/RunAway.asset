@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
   m_Name: RunAway
   m_EditorClassIdentifier: 
+  description: 
   _displayName: 
   _icon: {fileID: 0}
   _cooldown: 0
@@ -38,8 +39,8 @@ MonoBehaviour:
     00000000:
       type: {class: ChanceCondition, ns: , asm: Assembly-CSharp}
       data:
-        _description: 
-        chance: 0
+        description: '{0}% chance to trigger'
+        chance: 20
     00000001:
       type: {class: LeaveBattleEffect, ns: , asm: Assembly-CSharp}
       data:

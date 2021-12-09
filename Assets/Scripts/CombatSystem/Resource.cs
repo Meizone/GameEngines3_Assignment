@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Resource
 {
+    public delegate void ValueChangedEventHandler(float value, float percent);
+    public event ValueChangedEventHandler onValueChanged;
     public struct Value
     {
         public float amount;
@@ -60,6 +62,7 @@ public class Resource
         _current = Evaluate(direction, type, amount);
         change.amount = _current - change.amount;
         change.percent = percent - change.percent;
+        onValueChanged?.Invoke(current, percent);
         return change;
     }
 

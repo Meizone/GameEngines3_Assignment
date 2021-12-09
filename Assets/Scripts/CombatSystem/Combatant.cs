@@ -3,24 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Combatant : MonoBehaviour
 {
     public delegate void TurnStartedEvent();
-    private event TurnStartedEvent OnTurnStarted;
+    public delegate void ResourceChangedEvent(Resource.Type type, float value, float percent);
+    public event TurnStartedEvent onTurnStarted;
+    public event ResourceChangedEvent onResourceValueChanged;
 
     private uint _faction;
     public uint faction { get { return _faction; } }
 
     // Resources
-    [SerializeField] private Resource _health;
-    [SerializeField] private Resource _mana;
-    [SerializeField] private Resource _readiness;
-    [SerializeField] private Resource _aether;
+    [SerializeField] public Transform uiOffset;
+    [SerializeField] private Resource _aether = new Resource(0, 100, 0);
+    [SerializeField] private Resource _readiness = new Resource(0, 100, 0);
+    [SerializeField] private Resource _health = new Resource(0, 100, 100);
+    [SerializeField] private Resource _mana = new Resource(0, 100, 100);
+    public float aether { get { return _aether.current; } }
+    public float readiness { get { return _readiness.current; } }
     public float health { get { return _health.current; } }
     public float mana { get { return _mana.current; } }
-    public float readiness { get { return _readiness.current; } }
-    public float aether { get { return _aether.current; } }
+    public Resource[] Resources { get { return new Resource[] { _aether, _readiness, _health, _mana }; } }
 
     // Stats
     private float _speed;
@@ -98,34 +103,57 @@ public class Combatant : MonoBehaviour
 
     private void Start()
     {
+        _aether = new Resource(0, 100, 0);
+        _readiness = new Resource(0, 100, 0);
         _health = new Resource(0, 100, 100);
         _mana = new Resource(0, 100, 100);
-        _readiness = new Resource(0, 100, 0);
-        _aether = new Resource(0, 100, 0);
-        LoadFromSave();
-    }
-
-    private void LoadFromSave()
-    {
-        Debug.LogFormat("Message: <color=red>{0}</color>", "LoadFromSave not yet implemented.");
-        _health.Set(Payment.Type.PercentOfTotal, 100.0f);
-        _mana.Set(Payment.Type.PercentOfTotal, 75.0f);
-        _readiness.Set(Payment.Type.PercentOfTotal, 50.0f);
-        Debug.Log("aether");
-        _aether.Set(Payment.Type.PercentOfTotal, 25.0f);
         _speed = 50;
         _initiative = 50;
-        _turn = 0;
+    }
+
+    private void OnEnable()
+    {
+        _readiness.onValueChanged += OnReadinessValueChanged;
+        _aether.onValueChanged += OnAetherValueChanged;
+        _health.onValueChanged += OnHealthValueChanged;
+        _mana.onValueChanged += OnManaValueChanged;
+    }
+
+    private void OnDisable()
+    {
+        _readiness.onValueChanged -= OnReadinessValueChanged;
+        _health.onValueChanged -= OnHealthValueChanged;
+        _mana.onValueChanged -= OnManaValueChanged;
+    }
+
+    private void OnReadinessValueChanged(float value, float percent)
+    {
+        onResourceValueChanged?.Invoke(Resource.Type.Readiness, value, percent);
+    }
+
+    private void OnAetherValueChanged(float value, float percent)
+    {
+        onResourceValueChanged?.Invoke(Resource.Type.Aether, value, percent);
+    }
+
+    private void OnManaValueChanged(float value, float percent)
+    {
+        onResourceValueChanged?.Invoke(Resource.Type.Mana, value, percent);
+    }
+
+    private void OnHealthValueChanged(float value, float percent)
+    {
+        onResourceValueChanged?.Invoke(Resource.Type.Health, value, percent);
     }
 
     public void StartBattle(BattleManager battle)
     {
-        this._battle = battle;
-        _readiness.Set(Payment.Type.PercentOfTotal, 50.0f);
+        _battle = battle;
+        _readiness.Set(Payment.Type.PercentOfTotal, 0.0f);
         _turn = 0;
 
         foreach (AbilityData ability in _abilities)
-            ability.Register(OnTurnStarted);
+            ability.Register(onTurnStarted);
     }
 
     public void UpdateReadiness(float speedScale)
@@ -136,6 +164,6 @@ public class Combatant : MonoBehaviour
     public void StartTurn()
     {
         ++_turn;
-        OnTurnStarted?.Invoke();
+        onTurnStarted?.Invoke();
     }
 }

@@ -1,20 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static Resource.Type;
 
 public class BattleManager : MonoBehaviour
 {
     #region "Delegates, events, related things"
+    public delegate void CombatantChangedEvent(Combatant combatant);
+    public delegate void TargettingStartedEvent(AbilityData ability);
     public delegate void AbilityActivatedEvent(AbilityData activatedAbility, Combatant target);
     public delegate void ResourceChangedEvent(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final);
     public delegate void TurnChangedEvent(Combatant combatant, uint turn, uint turnInBattle);
+    public event CombatantChangedEvent onCombatantAdded;
+    public event CombatantChangedEvent onCombatantRemoved;
+    public event TargettingStartedEvent onTargettingStarted;
     public event AbilityActivatedEvent onAbilityActivated;
     public event ResourceChangedEvent onResourceChanged;
     public event TurnChangedEvent onBattleStarted;
     public event TurnChangedEvent onBeforeTurnStarted;
     public event TurnChangedEvent onTurnStarted;
     public event TurnChangedEvent onTurnEnded;
+
     [System.Flags] public enum Events
     {
         BattleStarted = (1 << 0),
@@ -25,7 +33,6 @@ public class BattleManager : MonoBehaviour
         ResourceChanged = (1 << 5),
     }
     #endregion
-
     public enum ExitState { Victory, Loss, Tie }
 
     private LinkedList<Combatant> _combatants;
@@ -66,6 +73,7 @@ public class BattleManager : MonoBehaviour
     {
         _combatants.AddLast(combatant);
         combatant.StartBattle(this);
+        onCombatantAdded?.Invoke(combatant);
     }
 
     private void Update()
@@ -98,6 +106,16 @@ public class BattleManager : MonoBehaviour
         onTurnStarted?.Invoke(activeCombatant, activeCombatant.turn, turn);
     }
 
+    public ref readonly Combatant GetActiveCombatant()
+    {
+        return ref activeCombatant;
+    }
+
+    public ref readonly AbilityData GetActivatingAbility()
+    {
+        return ref activatingAbility;
+    }
+
     public void ExitCombat(ExitState exitState)
     {
         turn = 0;
@@ -112,6 +130,7 @@ public class BattleManager : MonoBehaviour
     public void StartChoosingTarget(AbilityData ability)
     {
         activatingAbility = ability;
+        onTargettingStarted?.Invoke(ability);
 
         Debug.LogFormat("<color=red>Target choosing not yet implemented!");
         switch (activatingAbility.ability.targetType)

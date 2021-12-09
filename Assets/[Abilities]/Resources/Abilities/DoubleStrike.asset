@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
   m_Name: DoubleStrike
   m_EditorClassIdentifier: 
+  description: Health does not exist as a concept.
   _displayName: 
   _icon: {fileID: 0}
   _cooldown: 0
@@ -19,7 +20,7 @@ MonoBehaviour:
   _description: 
   _costs: []
   _triggers:
-  - _description: 
+  - _description: '{0}'
     _triggeringEvents: 0
     _possibleTargets: 2
     _maxTargets: 0
@@ -27,9 +28,14 @@ MonoBehaviour:
     _evaluateConditions: 0
     _conditions:
     - id: 0
-    - id: 0
     _effects: []
   references:
     version: 1
     00000000:
-      type: {class: , ns: , asm: }
+      type: {class: ResourceCondition, ns: , asm: Assembly-CSharp}
+      data:
+        description: '{0} {1} {2} {3}.'
+        resource: 0
+        query: 0
+        binaryPredicate: 0
+        amount: 0
