@@ -9,9 +9,11 @@ using UnityEngine.UI;
 
 public class Combatant : MonoBehaviour
 {
+    public delegate void DeathEvent(Combatant caller, float aetherValue);
     public delegate void TurnStartedEvent();
     public delegate void ResourceChangedEvent(Resource.Type type, float value, float percent);
     public event TurnStartedEvent onTurnStarted;
+    public event DeathEvent onDeath;
     public event ResourceChangedEvent onResourceValueChanged;
 
     [SerializeField] private uint _faction;
@@ -156,6 +158,8 @@ public class Combatant : MonoBehaviour
     private void OnHealthValueChanged(float value, float percent)
     {
         onResourceValueChanged?.Invoke(Resource.Type.Health, value, percent);
+        onDeath?.Invoke(this, _aether.value.amount);
+        _battle.OnCombatantDied(this, _aether.value.amount);
     }
 
     public void AddAbility(Ability ability)

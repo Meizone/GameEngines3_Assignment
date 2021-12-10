@@ -38,6 +38,7 @@ public class BattleManager : MonoBehaviour
     public enum ExitState { Victory, Loss, Tie }
 
     private LinkedList<Combatant> _combatants = new LinkedList<Combatant>();
+    private LinkedList<Combatant> _deadCombatants = new LinkedList<Combatant>();
     public LinkedList<Combatant> combatants { get { return _combatants; } }
 
     private Combatant activeCombatant;
@@ -79,12 +80,43 @@ public class BattleManager : MonoBehaviour
         onCombatantAdded?.Invoke(combatant);
     }
 
+    public LinkedList<uint> GetFactions()
+    {
+        LinkedList<uint> factionsInScenario = new LinkedList<uint>();
+        foreach (Combatant combatant in _combatants)
+        {
+            if (!factionsInScenario.Contains(combatant.faction))
+                factionsInScenario.AddLast(combatant.faction);
+        }
+        return factionsInScenario;
+    }
+
     private void Update()
     {
         float scaledSpeed = activeCombatant == null ? waitingSpeedScale : activeSpeedScale;
+        
+        foreach (Combatant corpse in _deadCombatants)
+        {
+            _combatants.Remove(corpse);
+        }
 
-        if (_combatants.Count <= 0)
+        if (_combatants.Count < 1)
+        {
+            Debug.LogError("There were no combatants in the combat scenario.");
             return;
+        }
+        else
+        {
+            LinkedList<uint> factionsInScenario = GetFactions();
+            if (factionsInScenario.Count == 0)
+            {
+                ExitCombat(ExitState.Tie);
+            }
+            else if (factionsInScenario.Count == 1)
+            {
+                ExitCombat(factionsInScenario.First.Value == 1 ? ExitState.Victory : ExitState.Loss);
+            }
+        }
 
         Combatant mostReady = _combatants.First.Value;
         foreach (Combatant combatant in _combatants)
@@ -145,6 +177,7 @@ public class BattleManager : MonoBehaviour
         activatingAbility = ability;
         onTargettingStarted?.Invoke(ability);
 
+        Debug.Log("ability.isTargetted" + ability.isTargetted);
         if (!ability.isTargetted)
             EventTargetChosen(activeCombatant);
 
@@ -172,7 +205,27 @@ public class BattleManager : MonoBehaviour
             foreach (Combatant combatant in FindObjectsOfType<Combatant>())
             {
                 _combatants.AddLast(combatant);
-            }            
+            }
+        }
+    }
+
+    internal void OnCombatantDied(Combatant caller, float amount)
+    {
+        _deadCombatants.AddLast(caller);
+
+        LinkedList<Combatant> rewardees = new LinkedList<Combatant>();
+        foreach (Combatant combatant in _combatants)
+        {
+            if (combatant.faction != caller.faction)
+            {
+                rewardees.AddLast(combatant);
+            }
+        }
+
+        float divviedValue = amount / rewardees.Count;
+        foreach (Combatant rewardee in rewardees)
+        {
+            rewardee.Pay(new Payment(Resource.Type.Aether, divviedValue));
         }
     }
 

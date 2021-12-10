@@ -27,7 +27,7 @@ public class Ability : ScriptableObject, IDescribable
     public SelectableTargets targetType { get { return _selectableTargets; } }
     public bool isTargetted {
         get {
-            if (_selectableTargets.HasFlag(SelectableTargets.Ally | SelectableTargets.Enemy))
+            if (_selectableTargets.HasFlag(SelectableTargets.Ally) || _selectableTargets.HasFlag(SelectableTargets.Enemy))
             {
                 foreach (Trigger effect in _triggers)
                     if (effect.IsTriggeredBy(BattleManager.Events.AbilityActivated))

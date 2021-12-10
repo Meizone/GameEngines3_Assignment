@@ -277,12 +277,10 @@ public class Trigger : IDescribable
         }
         //Debug.Log("Activate for " + activatedAbility.ability.name + ".");
 
-        //Debug.Log(Time.time + "Ability Activated, called by: " + callingAbility.ability.name);
-        //Debug.Log(Time.time + "by " + callingAbility.combatant.name);
-        //Debug.Log(Time.time + "Activated by: " + activatedAbility.ability.name);
-        //Debug.Log(Time.time + "targetting " + target.name + ".");
         if (callingAbility.combatant != activatedAbility.combatant)
             return;
+
+
         /// There should be logic in here to assess, like, what happens if the ability being activated isn't this one?
         /// Like, what if there's a condition that goes 'if someone else uses an ability, do this first before they do!
         /// I think I need to be more awake to figure out how that would go.
