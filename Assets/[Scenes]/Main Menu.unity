@@ -1486,6 +1486,15 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -582.2
       objectReference: {fileID: 0}
+    - target: {fileID: 5257304995456247770, guid: b6f9295d65e8ea4478152c681560ad5e, type: 3}
+      propertyPath: m_text
+      value: 'Brackeys
+
+        <size=18>How to make AWESOME Scene Transitions in
+        Unity!</size>
+
+        <size=18> Introduction to AUDIO in Unity</size>'
+      objectReference: {fileID: 0}
     - target: {fileID: 5494678782275430787, guid: b6f9295d65e8ea4478152c681560ad5e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
