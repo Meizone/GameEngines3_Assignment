@@ -170,28 +170,30 @@ public class BattleUI : MonoBehaviour
         return ref battle.GetActivatingAbility();
     }
 
-    public SelectionArrow.State DetermineSelectionState(Combatant combatant)
+    public SelectionArrow.State DetermineSelectionState(Combatant self, Combatant active)
     {
+        if (active == null)
+            return SelectionArrow.State.Inactive;
+
         AbilityData ability = GetActivatingAbility();
         if (ability == null)
         {
-            Combatant active = GetActiveCombatant();
-            if (active == combatant)
+            if (active == self)
                 return SelectionArrow.State.Active;
             return SelectionArrow.State.Inactive;
         }
-        else if (ability.combatant == combatant)
+        else if (ability.combatant == self)
         {
             if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Self))
                 return SelectionArrow.State.Ally;
             else
                 return SelectionArrow.State.Active;
         }
-        else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Ally) && ability.combatant.faction == combatant.faction)
+        else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Ally) && ability.combatant.faction == self.faction)
         {
             return SelectionArrow.State.Ally;
         }
-        else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Enemy) && ability.combatant.faction != combatant.faction)
+        else if (ability.ability.targetType.HasFlag(Ability.SelectableTargets.Enemy) && ability.combatant.faction != self.faction)
         {
             return SelectionArrow.State.Enemy;
         }

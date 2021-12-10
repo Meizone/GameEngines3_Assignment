@@ -89,7 +89,7 @@ public class AbilityBar : MonoBehaviour
 
     private void ReturnAbilityButton(AbilityButton abilityButton, bool removeFromActiveList = true)
     {
-        Debug.Log("ReturnAbilityButton");
+        //Debug.Log("ReturnAbilityButton");
         abilityButton.gameObject.SetActive(false);
         abilityButton.ForceInactive = false;
         if (removeFromActiveList)
@@ -104,7 +104,6 @@ public class AbilityBar : MonoBehaviour
 
     private void OnTurnEnded(Combatant combatant, uint turn, uint turnInBattle)
     {
-        Debug.Log("AbilityBar.OnTurnEnded");
         SetCombatant(null);
     }
 
