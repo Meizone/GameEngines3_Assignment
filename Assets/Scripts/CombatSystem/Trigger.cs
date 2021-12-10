@@ -172,6 +172,8 @@ public class Trigger : IDescribable
 
         foreach (Effect effect in _effects)
             effect.Execute(combatant, target);
+
+        combatant.PlayAttackAnim();
     }
 
     private void EvaluateTargets(LinkedList<Combatant> selectedTargets, AbilityData activatedAbility)
@@ -292,10 +294,10 @@ public class Trigger : IDescribable
             /// Here, there's no need to get the whole list from the battle manager if we already have all our relevant targets given to us,
             /// but we might still need to randomize if there's less than 2 max targets.
             if (_possibleTargets.HasFlag(Targets.Self))
-                if (_maxTargets > 2 || UnityEngine.Random.value < 0.5f)
+                if ((_maxTargets > 2 || UnityEngine.Random.value < 0.5f) && activatedAbility.combatant != null)
                     selectedTargets.AddLast(activatedAbility.combatant);
             if (_possibleTargets.HasFlag(Targets.Target))
-                if (_maxTargets > 2 || selectedTargets.Count < 1)
+                if ((_maxTargets > 2 || selectedTargets.Count < 1) && target != null)
                     selectedTargets.AddLast(target);
         }
         else if (_possibleTargets.HasFlag(Targets.Allies) || _possibleTargets.HasFlag(Targets.Enemies))

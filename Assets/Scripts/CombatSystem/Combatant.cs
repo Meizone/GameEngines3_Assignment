@@ -48,6 +48,7 @@ public class Combatant : MonoBehaviour
 
     private uint _turn;
     public uint turn { get { return _turn; } }
+    private Animator animator;
 
     #region Resources
     private Resource _GetResource(Resource.Type resource)
@@ -112,6 +113,7 @@ public class Combatant : MonoBehaviour
     private void Awake()
     {
         selectionBox = GetComponent<Collider2D>();
+        animator = GetComponent<Animator>();
 
         _aether = new Resource(0, 100, 0);
         _readiness = new Resource(0, 100, 0);
@@ -170,10 +172,16 @@ public class Combatant : MonoBehaviour
     {
         onResourceValueChanged?.Invoke(Resource.Type.Health, value, percent);
 
+
         if (percent <= 0)
         {
             onDeath?.Invoke(this, _aether.value.amount);
             _battle.OnCombatantDied(this, _aether.value.amount);
+            animator.SetTrigger("Dead");
+        }
+        else
+        {
+            animator.SetTrigger("Block");
         }
     }
 
@@ -254,5 +262,10 @@ public class Combatant : MonoBehaviour
 
         int i = UnityEngine.Random.Range(0, activatedAbilities.Count - 1);
         _battle.ChooseRandomTarget(activatedAbilities.ElementAt(i));
+    }
+
+    public void PlayAttackAnim()
+    {
+        animator.SetTrigger("Attack");
     }
 }

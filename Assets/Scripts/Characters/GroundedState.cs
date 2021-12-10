@@ -53,6 +53,7 @@ public class GroundedState : BaseState
         // Decide the animation and direction of the character
         bool isOutsideDeadzone = Mathf.Abs(moveInput.x) > 0.2f;
         player.animator.SetBool("isRun", isOutsideDeadzone);
+        player.animator.SetBool("isJump", !isGrounded);
         player.animator.SetFloat("speed", Mathf.Abs(player.rigidbody.velocity.x) * player.animationStepSpeed / (player.moveSpeed));
 
         if (isOutsideDeadzone && Mathf.Sign(moveInput.x) != direction) // Only need to scale model if direction has changed
