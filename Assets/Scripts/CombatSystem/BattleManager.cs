@@ -145,8 +145,6 @@ public class BattleManager : MonoBehaviour
         activatingAbility = ability;
         onTargettingStarted?.Invoke(ability);
 
-        Debug.Log("ability.ability.targetType" + ability.ability.targetType);
-
         bool clear = false;
         foreach (Combatant combatant in _combatants)
         {
@@ -209,8 +207,6 @@ public class BattleManager : MonoBehaviour
 
     public void EventTargetChosen(Combatant target)
     {
-        Debug.Log("EventTargetChosen" + target.gameObject.name);
-
         if (activatingAbility != null)
             if (activatingAbility.Pay(target))
                 onAbilityActivated?.Invoke(activatingAbility, target);

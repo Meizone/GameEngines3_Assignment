@@ -177,7 +177,6 @@ public class Combatant : MonoBehaviour
 
     public void SetTargettable(bool value)
     {
-        Debug.Log(gameObject.name + "has selectable set to" + value + "!");
         selectionBox.enabled = value;
     }
 
@@ -195,7 +194,6 @@ public class Combatant : MonoBehaviour
                     Combatant combatant = hit2D.collider.GetComponent<Combatant>();
                     if (combatant)
                     {
-                        Debug.Log("Mouse.current.leftButton.IsActuated() " + combatant.gameObject.name);
                         battle.EventTargetChosen(combatant);
                     }
                 }

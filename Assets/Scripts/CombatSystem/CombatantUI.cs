@@ -27,7 +27,7 @@ public class CombatantUI : MonoBehaviour
     public void SetCombatant(Combatant value)
     {
         combatant = value;
-        selectionArrow.state = battleUI.DetermineSelectionState(combatant);
+        selectionArrow.state = battleUI.DetermineSelectionState(combatant, battleUI.GetActiveCombatant());
     }
 
     public void SetSettings(Settings value)
@@ -99,7 +99,7 @@ public class CombatantUI : MonoBehaviour
 
     private void OnTargettingStarted(AbilityData ability)
     {
-        battleUI.DetermineSelectionState(ability.combatant);
+        selectionArrow.state = battleUI.DetermineSelectionState(this.combatant, ability.combatant);
     }
 
     private void OnAbilityActivated(AbilityData activatedAbility, Combatant target)
