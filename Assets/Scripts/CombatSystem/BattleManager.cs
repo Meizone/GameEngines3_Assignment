@@ -46,11 +46,35 @@ public class BattleManager : MonoBehaviour
     private float waitingSpeedScale = 1.0f;
     private float activeSpeedScale = 0.0f;
     private uint turn;
+    private bool hasStarted = false;
+    private bool hasEnded = false;
     public bool isTargetting { get; private set; } = false;
+    [SerializeField] private string VictorySound;
+    [SerializeField] private string LossSound;
+    [SerializeField] private string TieSound;
 
-    private void Start()
+    private void Clear()
     {
-        StartBattle(FindObjectsOfType<Combatant>());
+        onCombatantAdded = null;
+        onCombatantRemoved = null;
+        onTargettingStarted = null;
+        onTargettingCancelled = null;
+        onAbilityActivated = null;
+        onResourceChanged = null;
+        onBattleStarted = null;
+        onBeforeTurnStarted = null;
+        onTurnStarted = null;
+        onTurnEnded = null;
+    }
+
+    private void OnDestroy()
+    {
+        Clear();
+    }
+
+    private void OnApplicationQuit()
+    {
+        Clear();
     }
 
     public void StartBattle(IEnumerable<Combatant> combatants)
@@ -71,10 +95,15 @@ public class BattleManager : MonoBehaviour
 
         foreach (Combatant combatant in _combatants)
             onBattleStarted?.Invoke(combatant, 0, 0);
+
+        hasStarted = true;
     }
 
     public void AddCombatant(Combatant combatant)
     {
+        if (_combatants.Contains(combatant))
+            return;
+
         _combatants.AddLast(combatant);
         combatant.StartBattle(this);
         onCombatantAdded?.Invoke(combatant);
@@ -93,16 +122,29 @@ public class BattleManager : MonoBehaviour
 
     private void Update()
     {
+        if (!hasStarted)
+        {
+            StartBattle(FindObjectsOfType<Combatant>());
+            return;
+        }
+        if (hasEnded)
+        {
+            return;
+        }
+
         float scaledSpeed = activeCombatant == null ? waitingSpeedScale : activeSpeedScale;
         
         foreach (Combatant corpse in _deadCombatants)
         {
             _combatants.Remove(corpse);
+            onCombatantRemoved?.Invoke(corpse);
+            corpse.EndBattle(this);
         }
 
-        if (_combatants.Count < 1)
+        if (_combatants.Count < 1 || _combatants.First == null || _combatants.First.Value == null)
         {
             Debug.LogError("There were no combatants in the combat scenario.");
+            ExitCombat(ExitState.Tie);
             return;
         }
         else
@@ -111,10 +153,12 @@ public class BattleManager : MonoBehaviour
             if (factionsInScenario.Count == 0)
             {
                 ExitCombat(ExitState.Tie);
+                return;
             }
             else if (factionsInScenario.Count == 1)
             {
                 ExitCombat(factionsInScenario.First.Value == 1 ? ExitState.Victory : ExitState.Loss);
+                return;
             }
         }
 
@@ -126,8 +170,10 @@ public class BattleManager : MonoBehaviour
                 mostReady = combatant;
         }
 
+        Debug.Log("mostReady.readiness : " + mostReady.readiness);
         if (activeCombatant == null && mostReady.readiness > 100)
         {
+            Debug.Log("Should start turn");
             StartTurn(mostReady);
         }
     }
@@ -163,7 +209,27 @@ public class BattleManager : MonoBehaviour
         turn = 0;
         Debug.LogFormat("<color=yellow>Exiting combat with exit state {0} has not yet been implemented.</color>", exitState);
         LevelLoader.LoadLevel(LevelLoader.previousLevel);
+        
+        foreach (Combatant combatant in _combatants)
+            combatant.EndBattle(this);
         _combatants.Clear();
+
+        switch (exitState)
+        {
+            case ExitState.Victory:
+                AudioManager.Play(VictorySound);
+                break;
+            case ExitState.Loss:
+                AudioManager.Play(LossSound);
+                break;
+            case ExitState.Tie:
+                AudioManager.Play(TieSound);
+                break;
+            default:
+                break;
+        }
+
+        hasEnded = true;
     }
 
     public void EventResourceChanged(Combatant combatant, Resource.Type resource, Resource.Value change, Resource.Value final)
@@ -209,7 +275,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    internal void OnCombatantDied(Combatant caller, float amount)
+    internal void OnCombatantDied(Combatant caller, float aether)
     {
         _deadCombatants.AddLast(caller);
 
@@ -222,7 +288,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        float divviedValue = amount / rewardees.Count;
+        float divviedValue = aether / rewardees.Count;
         foreach (Combatant rewardee in rewardees)
         {
             rewardee.Pay(new Payment(Resource.Type.Aether, divviedValue));

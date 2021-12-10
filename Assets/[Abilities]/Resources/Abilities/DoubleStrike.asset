@@ -26,7 +26,7 @@ MonoBehaviour:
   _triggers:
   - _description: '{0}'
     _triggeringEvents: 2
-    _possibleTargets: 8
+    _possibleTargets: 1
     _maxTargets: 0
     _evaluateTargets: 0
     _evaluateConditions: 0

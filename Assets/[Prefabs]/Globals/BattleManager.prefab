@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31c80edd190087c4e96ff84acafb5934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  VictorySound: Victory
+  LossSound: Loss
+  TieSound: Tie
 --- !u!1001 &7787981263442524767
 PrefabInstance:
   m_ObjectHideFlags: 0

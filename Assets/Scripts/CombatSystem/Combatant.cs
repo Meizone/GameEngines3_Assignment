@@ -138,6 +138,17 @@ public class Combatant : MonoBehaviour
         _readiness.onValueChanged -= OnReadinessValueChanged;
         _health.onValueChanged -= OnHealthValueChanged;
         _mana.onValueChanged -= OnManaValueChanged;
+
+    }
+
+    private void OnDestroy()
+    {
+        enabled = false;
+    }
+
+    private void OnApplicationQuit()
+    {
+        enabled = false;
     }
 
     private void OnReadinessValueChanged(float value, float percent)
@@ -158,8 +169,12 @@ public class Combatant : MonoBehaviour
     private void OnHealthValueChanged(float value, float percent)
     {
         onResourceValueChanged?.Invoke(Resource.Type.Health, value, percent);
-        onDeath?.Invoke(this, _aether.value.amount);
-        _battle.OnCombatantDied(this, _aether.value.amount);
+
+        if (percent <= 0)
+        {
+            onDeath?.Invoke(this, _aether.value.amount);
+            _battle.OnCombatantDied(this, _aether.value.amount);
+        }
     }
 
     public void AddAbility(Ability ability)
@@ -179,6 +194,12 @@ public class Combatant : MonoBehaviour
             ability.Register(onTurnStarted);
     }
 
+    public void EndBattle(BattleManager battle)
+    {
+        foreach (AbilityData ability in _abilities)
+            ability.Deregister(onTurnStarted);
+    }
+
     public void SetTargettable(bool value)
     {
         selectionBox.enabled = value;
@@ -186,6 +207,9 @@ public class Combatant : MonoBehaviour
 
     private void Update()
     {
+        if (_battle == null)
+            return;
+
         if (Mouse.current.leftButton.IsActuated())
         {
             Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -230,10 +254,5 @@ public class Combatant : MonoBehaviour
 
         int i = UnityEngine.Random.Range(0, activatedAbilities.Count - 1);
         _battle.ChooseRandomTarget(activatedAbilities.ElementAt(i));
-    }
-
-    private void OnDestroy()
-    {
-        Debug.LogError(gameObject.name + " was destroyed prematurely!");
     }
 }

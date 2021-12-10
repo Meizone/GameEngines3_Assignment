@@ -81,9 +81,17 @@ public class LevelLoader : MonoBehaviour
     {
         if (levelsToLoad.Count > 0 && loadCoroutine == null && unloadCoroutine == null)
         {
-            _LoadLevel(levelsToUnLoad.First.Value, levelsToLoad.First.Value);
-            levelsToUnLoad.RemoveFirst();
-            levelsToLoad.RemoveFirst();
+            if (levelsToUnLoad.Count > 0)
+            {
+                _LoadLevel(levelsToUnLoad.First.Value, levelsToLoad.First.Value);
+                levelsToUnLoad.RemoveFirst();
+                levelsToLoad.RemoveFirst();
+            }
+            else
+            {
+                _LoadLevel(null, levelsToLoad.First.Value);
+                levelsToLoad.RemoveFirst();
+            }
         }
     }
 

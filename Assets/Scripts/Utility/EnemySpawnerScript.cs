@@ -11,28 +11,13 @@ public class EnemySpawnerScript : MonoBehaviour
     private BattleManager battleManager;
     private void Awake()
     {
-        SceneManager.sceneUnloaded += SceneManager_sceneUnloaded;
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
 
-    private void SceneManager_sceneUnloaded(Scene arg0)
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        Debug.Log("SceneManager_sceneUnloaded");
-        Combatant combatant = Instantiate(EnemyList[0], transform);
-        battleManager = FindObjectOfType<BattleManager>();
-        battleManager.AddCombatant(combatant);
-    }
-
-    void Start()
-    {
-        Debug.Log("Start");
-        Combatant combatant = Instantiate(EnemyList[0], transform);
-        battleManager = FindObjectOfType<BattleManager>();
-        battleManager.AddCombatant(combatant);
-    }
-
-    private void OnLevelWasLoaded(int level)
-    {
-        Debug.Log("OnLevelWasLoaded");
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+        Debug.Log("SceneManager_sceneLoaded");
         Combatant combatant = Instantiate(EnemyList[0], transform);
         battleManager = FindObjectOfType<BattleManager>();
         battleManager.AddCombatant(combatant);

@@ -45,6 +45,16 @@ public class AbilityButton : MonoBehaviour
     }
     #endregion
 
+    private void OnDestroy()
+    {
+        Assign(null);
+    }
+
+    private void OnApplicationQuit()
+    {
+        Assign(null);
+    }
+
     #region "Private functions"
     private void ChooseTarget()
     {

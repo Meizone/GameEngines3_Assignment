@@ -217,7 +217,7 @@ public class Trigger : IDescribable
 
     private bool EvaluateConditions(Combatant caster, Combatant target)
     {
-        if (caster.gameObject == null || target.gameObject == null)
+        if (caster == null || caster.gameObject == null || target == null || target.gameObject == null)
             return false;
 
         switch (_evaluateConditions)
