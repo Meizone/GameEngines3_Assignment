@@ -140,6 +140,7 @@ public class BattleManager : MonoBehaviour
             onCombatantRemoved?.Invoke(corpse);
             corpse.EndBattle(this);
         }
+        _deadCombatants.Clear();
 
         if (_combatants.Count < 1 || _combatants.First == null || _combatants.First.Value == null)
         {
@@ -170,10 +171,8 @@ public class BattleManager : MonoBehaviour
                 mostReady = combatant;
         }
 
-        Debug.Log("mostReady.readiness : " + mostReady.readiness);
         if (activeCombatant == null && mostReady.readiness > 100)
         {
-            Debug.Log("Should start turn");
             StartTurn(mostReady);
         }
     }
@@ -243,7 +242,6 @@ public class BattleManager : MonoBehaviour
         activatingAbility = ability;
         onTargettingStarted?.Invoke(ability);
 
-        Debug.Log("ability.isTargetted" + ability.isTargetted);
         if (!ability.isTargetted)
             EventTargetChosen(activeCombatant);
 

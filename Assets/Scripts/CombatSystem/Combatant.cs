@@ -115,11 +115,6 @@ public class Combatant : MonoBehaviour
         selectionBox = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
 
-        _aether = new Resource(0, 100, 0);
-        _readiness = new Resource(0, 100, 0);
-        _health = new Resource(0, 100, 100);
-        _mana = new Resource(0, 100, 100);
-
         _abilities = new LinkedList<AbilityData>();
         foreach (Ability ability in abilityTypes)
         {
@@ -172,7 +167,6 @@ public class Combatant : MonoBehaviour
     {
         onResourceValueChanged?.Invoke(Resource.Type.Health, value, percent);
 
-
         if (percent <= 0)
         {
             onDeath?.Invoke(this, _aether.value.amount);
@@ -199,13 +193,13 @@ public class Combatant : MonoBehaviour
         _turn = 0;
 
         foreach (AbilityData ability in _abilities)
-            ability.Register(onTurnStarted);
+            ability.Register(this);
     }
 
     public void EndBattle(BattleManager battle)
     {
         foreach (AbilityData ability in _abilities)
-            ability.Deregister(onTurnStarted);
+            ability.Deregister(this);
     }
 
     public void SetTargettable(bool value)

@@ -44,7 +44,7 @@ MonoBehaviour:
           resource: 0
           direction: -1
           type: 0
-          _amount: 10
+          _amount: 5
     00000001:
       type: {class: PlaySoundEffect, ns: , asm: Assembly-CSharp}
       data:

@@ -168,8 +168,6 @@ public class Trigger : IDescribable
     #region "Private functions"
     private void ExecuteEffects(Combatant combatant, Combatant target)
     {
-        Debug.Log("ExecuteEffects for " + combatant.gameObject.name + " with target " + target.gameObject.name + ".");
-
         foreach (Effect effect in _effects)
         {
             if (effect == null)
@@ -288,10 +286,8 @@ public class Trigger : IDescribable
 
         if (callingAbility != activatedAbility)
         {
-            //Debug.Log("callingAbility != activatedAbility: " + callingAbility.ability.name + " " + activatedAbility.ability.name + ".");
             return; // FOR NOW
         }
-        //Debug.Log("Activate for " + activatedAbility.ability.name + ".");
 
         if (callingAbility.combatant != activatedAbility.combatant)
             return;
@@ -316,14 +312,31 @@ public class Trigger : IDescribable
         }
         else if (_possibleTargets.HasFlag(Targets.Allies) || _possibleTargets.HasFlag(Targets.Enemies))
         {
-            /// This ungainly chunk of code, written at 4:27am, is meant to take the list of all combatants in the fight,
-            /// and then FIRST pair it down by excluding unwanted targets, SECOND reshuffle it, and then THIRD reduce it down to the max
-            selectedTargets = new LinkedList<Combatant>(activatedAbility.combatant.battle.combatants.SkipWhile((o) =>
+            foreach (Combatant combatant in activatedAbility.combatant.battle.combatants)
             {
-                return ((o == activatedAbility.combatant && !_possibleTargets.HasFlag(Targets.Self)) ||
-                (o.faction == activatedAbility.combatant.faction && !_possibleTargets.HasFlag(Targets.Allies)) ||
-                (o.faction != activatedAbility.combatant.faction && !_possibleTargets.HasFlag(Targets.Enemies)));
-            }).OrderBy((o) => { return UnityEngine.Random.value; }));
+                if (combatant == activatedAbility.combatant)
+                {
+                    if (_possibleTargets.HasFlag(Targets.Self))
+                        selectedTargets.AddLast(combatant);
+                }
+                else if (combatant == target)
+                {
+                    if (_possibleTargets.HasFlag(Targets.Target))
+                        selectedTargets.AddLast(combatant);
+                }
+                else if (combatant.faction == activatedAbility.combatant.faction)
+                {
+                    if (_possibleTargets.HasFlag(Targets.Allies))
+                        selectedTargets.AddLast(combatant);
+                }
+                else if (combatant.faction != activatedAbility.combatant.faction)
+                {
+                    if (_possibleTargets.HasFlag(Targets.Enemies))
+                        selectedTargets.AddLast(combatant);
+                }
+            }
+            selectedTargets.OrderBy((o) => { return UnityEngine.Random.value; });
+
             if (_maxTargets > 0)
                 while (selectedTargets.Count > _maxTargets)
                     selectedTargets.RemoveLast();

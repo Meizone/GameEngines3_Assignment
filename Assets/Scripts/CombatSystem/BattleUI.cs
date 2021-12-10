@@ -32,20 +32,28 @@ public class BattleUI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        LinkedList<CombatantUI> uisToReturn = new LinkedList<CombatantUI>();
+        LinkedList<Combatant> combatantsToAdd = new LinkedList<Combatant>();
+        
         foreach (KeyValuePair<Combatant, CombatantUI> kvp in combatantUIs)
         {
             if (kvp.Key == null)
             {
-                ReturnCombatantUI(kvp.Value);
+                uisToReturn.AddLast(kvp.Value);
                 continue;
             }
             if (kvp.Value == null)
             {
-                OnCombatantAdded(kvp.Key);
+                combatantsToAdd.AddLast(kvp.Key);
+                continue;
             }
-
             kvp.Value.transform.position = kvp.Key.uiOffset.position;
         }
+
+        foreach (CombatantUI item in uisToReturn)
+            ReturnCombatantUI(item);
+        foreach (Combatant item in combatantsToAdd)
+            OnCombatantAdded(item);
     }
 
     public void SetBattle(BattleManager battle)
@@ -101,7 +109,6 @@ public class BattleUI : MonoBehaviour
 
     private void OnCombatantAdded(Combatant combatant)
     {
-        Debug.Log("BattleUI.OnCombatantAdded");
         CombatantUI ui = GetCombatantUI();
         combatantUIs[combatant] = ui;
         ui.Init(this, settings, combatant);

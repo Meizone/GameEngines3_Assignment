@@ -28,7 +28,7 @@ public class AbilityData
     public bool isPayable { get { return _cooldown == 0 && _combatant.CanPay(ability.costs); } }
     public bool isTargetted { get { return _ability.isTargetted; } }
     public uint cooldownValue { get { return _cooldown; } }
-    public float cooldownPercent { get { return ability.cooldown <= 0 ? 0 : Mathf.Clamp(_cooldown / ability.cooldown, 0, 1); } }
+    public float cooldownPercent { get { return ability.cooldown <= 0 ? 0 : Mathf.Clamp((float)_cooldown / (float)ability.cooldown, 0, 1); } }
     #endregion
 
     #region "Public functions"
@@ -46,16 +46,16 @@ public class AbilityData
         return true;
     }
 
-    internal void Register(Combatant.TurnStartedEvent onTurnStarted)
+    internal void Register(Combatant combatant)
     {
-        onTurnStarted += Cooldown;
+        combatant.onTurnStarted += Cooldown;
         foreach (Trigger trigger in _ability.triggers)
             trigger.Register(this);
     }
 
-    internal void Deregister(Combatant.TurnStartedEvent onTurnStarted)
+    internal void Deregister(Combatant combatant)
     {
-        onTurnStarted -= Cooldown;
+        combatant.onTurnStarted -= Cooldown;
         foreach (Trigger trigger in _ability.triggers)
             trigger.Deregister(this);
     }

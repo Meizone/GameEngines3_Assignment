@@ -71,6 +71,7 @@ public class AbilityBar : MonoBehaviour
         {
             AbilityButton ab =  GetAbilityButton();
             ab.Assign(ability);
+            ab.UpdateClickable();
         }
     }
 
@@ -89,7 +90,6 @@ public class AbilityBar : MonoBehaviour
 
     private void ReturnAbilityButton(AbilityButton abilityButton, bool removeFromActiveList = true)
     {
-        //Debug.Log("ReturnAbilityButton");
         abilityButton.gameObject.SetActive(false);
         abilityButton.ForceInactive = false;
         if (removeFromActiveList)

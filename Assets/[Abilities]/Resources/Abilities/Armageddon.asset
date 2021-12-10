@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
-  m_Name: DoubleStrike
+  m_Name: Armageddon
   m_EditorClassIdentifier: 
-  description: '{0}{0}'
-  _displayName: Double Strike
+  description: 
+  _displayName: Armageddon
   _icon: {fileID: 0}
-  _cooldown: 2
-  _selectableTargets: 4
+  _cooldown: 10
+  _selectableTargets: 0
   _description: 
   _costs:
   - resource: 2
@@ -25,32 +25,27 @@ MonoBehaviour:
     _amount: 100
   - resource: 1
     direction: -1
-    type: 0
-    _amount: 5
+    type: 1
+    _amount: 50
   _triggers:
-  - _description: '{0}'
+  - _description: 
     _triggeringEvents: 2
-    _possibleTargets: 1
+    _possibleTargets: 2147483647
     _maxTargets: 0
-    _evaluateTargets: 0
-    _evaluateConditions: 0
-    _conditions: []
-    _effects:
-    - id: 0
-    - id: 1
-  - _description: '{0}'
-    _triggeringEvents: 2
-    _possibleTargets: 2
-    _maxTargets: 0
-    _evaluateTargets: 0
+    _evaluateTargets: 2
     _evaluateConditions: 0
     _conditions:
-    - id: 2
+    - id: 0
     _effects:
-    - id: 3
+    - id: 1
   references:
     version: 1
     00000000:
+      type: {class: ChanceCondition, ns: , asm: Assembly-CSharp}
+      data:
+        description: '{0}% chance to trigger effects.'
+        chance: 40
+    00000001:
       type: {class: PaymentEffect, ns: , asm: Assembly-CSharp}
       data:
         _description: 
@@ -58,23 +53,4 @@ MonoBehaviour:
           resource: 0
           direction: -1
           type: 0
-          _amount: 5
-    00000001:
-      type: {class: PlaySoundEffect, ns: , asm: Assembly-CSharp}
-      data:
-        _description: 
-        sound: Attack
-    00000002:
-      type: {class: ChanceCondition, ns: , asm: Assembly-CSharp}
-      data:
-        description: '{0}% chance to trigger effects.'
-        chance: 20
-    00000003:
-      type: {class: PaymentEffect, ns: , asm: Assembly-CSharp}
-      data:
-        _description: 
-        payment:
-          resource: 2
-          direction: 1
-          type: 2
-          _amount: 100
+          _amount: 50

@@ -14,6 +14,7 @@ public class ChanceCondition : Condition
 
     public override bool Evaluate(Combatant caster, Combatant target)
     {
-        return Random.Range(0, 99.999f) < chance;
+        float r = Random.Range(0, 99.999f);
+        return r < chance;
     }
 }

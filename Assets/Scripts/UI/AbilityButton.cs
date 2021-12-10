@@ -26,7 +26,7 @@ public class AbilityButton : MonoBehaviour
         if (_abilityData != null)
         {
             button.onClick.RemoveListener(ChooseTarget);
-            abilityData.onAvailabilityChanged -= UpdateClickable;
+            //abilityData.onAvailabilityChanged -= UpdateClickable;
         }
 
         _abilityData = abilityData;
@@ -36,7 +36,7 @@ public class AbilityButton : MonoBehaviour
             gameObject.SetActive(true);
             text.text = _abilityData.ability.displayName;
             button.onClick.AddListener(ChooseTarget);
-            abilityData.onAvailabilityChanged += UpdateClickable;
+            //abilityData.onAvailabilityChanged += UpdateClickable;
         }
         else
         {
@@ -66,7 +66,9 @@ public class AbilityButton : MonoBehaviour
     public void UpdateClickable()
     {
         if (_abilityData != null)
+        {
             UpdateClickable(_abilityData.cooldownValue, _abilityData.cooldownPercent, _abilityData.isPayable);
+        }
     }
 
     private void UpdateClickable(uint cooldownValue, float cooldownPercent, bool payable)
