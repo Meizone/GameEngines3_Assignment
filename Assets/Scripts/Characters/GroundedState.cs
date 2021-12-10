@@ -47,8 +47,8 @@ public class GroundedState : BaseState
                 player.rigidbody.velocity = new Vector2(Mathf.Clamp(player.rigidbody.velocity.x, -player.moveSpeed, player.moveSpeed), player.rigidbody.velocity.y);
         }
 
-
-        Jump(player, ref isJump);
+        if(isGrounded)
+            Jump(player, ref isJump);
 
         // Decide the animation and direction of the character
         bool isOutsideDeadzone = Mathf.Abs(moveInput.x) > 0.2f;

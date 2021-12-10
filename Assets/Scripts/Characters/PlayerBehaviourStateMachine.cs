@@ -93,7 +93,6 @@ public class PlayerBehaviourStateMachine : MonoBehaviour
     void Update()
     {
         currentState.StateUpdate(this);
-        Debug.Log(previousBattle);
     }
 
     void FixedUpdate()
