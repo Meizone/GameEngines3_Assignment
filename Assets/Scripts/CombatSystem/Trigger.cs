@@ -168,13 +168,15 @@ public class Trigger : IDescribable
     #region "Private functions"
     private void ExecuteEffects(Combatant combatant, Combatant target)
     {
+        Debug.Log("ExecuteEffects for " + combatant.gameObject.name + " with target " + target.gameObject.name + ".");
+
         foreach (Effect effect in _effects)
             effect.Execute(combatant, target);
     }
 
-    private void EvaluateTargets(LinkedList<Combatant> selectedTargets, AbilityData activatedAbility, Combatant target)
+    private void EvaluateTargets(LinkedList<Combatant> selectedTargets, AbilityData activatedAbility)
     {
-        Debug.Log("EvaluateTargets for " + activatedAbility.ability.name + " with target " + target.gameObject.name + " and selected targets " + selectedTargets.Count + ".");
+        Debug.Log("EvaluateTargets for " + activatedAbility.ability.name + " and selected targets " + selectedTargets.Count + ".");
 
         switch (_evaluateTargets)
         {
@@ -186,14 +188,17 @@ public class Trigger : IDescribable
                         return;
                     }
                 }
-                ExecuteEffects(activatedAbility.combatant, target);
+                foreach (Combatant combatant in selectedTargets)
+                {
+                    ExecuteEffects(activatedAbility.combatant, combatant);
+                }
                 return;
             case Evaluation.Any:
                 foreach (Combatant combatant in selectedTargets)
                 {
                     if (EvaluateConditions(activatedAbility.combatant, combatant))
                     {
-                        ExecuteEffects(activatedAbility.combatant, target);
+                        ExecuteEffects(activatedAbility.combatant, combatant);
                         return;
                     }
                 }
@@ -203,7 +208,7 @@ public class Trigger : IDescribable
                 {
                     if (EvaluateConditions(activatedAbility.combatant, combatant))
                     {
-                        ExecuteEffects(activatedAbility.combatant, target);
+                        ExecuteEffects(activatedAbility.combatant, combatant);
                     }
                 }
                 return;
@@ -214,6 +219,8 @@ public class Trigger : IDescribable
 
     private bool EvaluateConditions(Combatant caster, Combatant target)
     {
+        Debug.Log("EvaluateConditions for " + caster.gameObject.name + " with target " + target.gameObject.name + ".");
+
         switch (_evaluateConditions)
         {
             case Evaluation.All:
@@ -271,7 +278,6 @@ public class Trigger : IDescribable
         }
         Debug.Log("Activate for " + activatedAbility.ability.name + ".");
 
-
         //Debug.Log(Time.time + "Ability Activated, called by: " + callingAbility.ability.name);
         //Debug.Log(Time.time + "by " + callingAbility.combatant.name);
         //Debug.Log(Time.time + "Activated by: " + activatedAbility.ability.name);
@@ -283,7 +289,8 @@ public class Trigger : IDescribable
         /// I think I need to be more awake to figure out how that would go.
 
         LinkedList<Combatant> selectedTargets = new LinkedList<Combatant>();
-        if (_possibleTargets.HasFlag(Targets.Self | Targets.Target) && !_possibleTargets.HasFlag(Targets.Allies | Targets.Enemies))
+        if ((_possibleTargets.HasFlag(Targets.Self) || _possibleTargets.HasFlag(Targets.Target))
+            && !_possibleTargets.HasFlag(Targets.Allies) && !_possibleTargets.HasFlag(Targets.Enemies))
         {
             /// Here, there's no need to get the whole list from the battle manager if we already have all our relevant targets given to us,
             /// but we might still need to randomize if there's less than 2 max targets.
@@ -294,7 +301,7 @@ public class Trigger : IDescribable
                 if (_maxTargets > 2 || selectedTargets.Count < 1)
                     selectedTargets.AddLast(target);
         }
-        else if (_possibleTargets.HasFlag(Targets.Allies | Targets.Enemies))
+        else if (_possibleTargets.HasFlag(Targets.Allies) || _possibleTargets.HasFlag(Targets.Enemies))
         {
             /// This ungainly chunk of code, written at 4:27am, is meant to take the list of all combatants in the fight,
             /// and then FIRST pair it down by excluding unwanted targets, SECOND reshuffle it, and then THIRD reduce it down to the max
@@ -309,7 +316,7 @@ public class Trigger : IDescribable
                     selectedTargets.RemoveLast();
         }
 
-        EvaluateTargets(selectedTargets, activatedAbility, target);
+        EvaluateTargets(selectedTargets, activatedAbility);
         return;
     }
     #endregion
