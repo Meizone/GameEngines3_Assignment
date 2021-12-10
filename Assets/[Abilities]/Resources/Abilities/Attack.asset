@@ -33,6 +33,7 @@ MonoBehaviour:
     _conditions: []
     _effects:
     - id: 0
+    - id: 1
   references:
     version: 1
     00000000:
@@ -44,3 +45,8 @@ MonoBehaviour:
           direction: -1
           type: 0
           _amount: 10
+    00000001:
+      type: {class: PlaySoundEffect, ns: , asm: Assembly-CSharp}
+      data:
+        _description: 
+        sound: Attack

@@ -176,8 +176,6 @@ public class Trigger : IDescribable
 
     private void EvaluateTargets(LinkedList<Combatant> selectedTargets, AbilityData activatedAbility)
     {
-        Debug.Log("EvaluateTargets for " + activatedAbility.ability.name + " and selected targets " + selectedTargets.Count + ".");
-
         switch (_evaluateTargets)
         {
             case Evaluation.All:
@@ -219,7 +217,8 @@ public class Trigger : IDescribable
 
     private bool EvaluateConditions(Combatant caster, Combatant target)
     {
-        Debug.Log("EvaluateConditions for " + caster.gameObject.name + " with target " + target.gameObject.name + ".");
+        if (caster.gameObject == null || target.gameObject == null)
+            return false;
 
         switch (_evaluateConditions)
         {
@@ -276,7 +275,7 @@ public class Trigger : IDescribable
             //Debug.Log("callingAbility != activatedAbility: " + callingAbility.ability.name + " " + activatedAbility.ability.name + ".");
             return; // FOR NOW
         }
-        Debug.Log("Activate for " + activatedAbility.ability.name + ".");
+        //Debug.Log("Activate for " + activatedAbility.ability.name + ".");
 
         //Debug.Log(Time.time + "Ability Activated, called by: " + callingAbility.ability.name);
         //Debug.Log(Time.time + "by " + callingAbility.combatant.name);

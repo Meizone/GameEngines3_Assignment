@@ -34,6 +34,7 @@ MonoBehaviour:
     - id: 0
     _effects:
     - id: 1
+    - id: 2
   references:
     version: 1
     00000000:
@@ -46,3 +47,8 @@ MonoBehaviour:
       data:
         _description: 
         exitState: 1
+    00000002:
+      type: {class: PlaySoundEffect, ns: , asm: Assembly-CSharp}
+      data:
+        _description: 
+        sound: Flee

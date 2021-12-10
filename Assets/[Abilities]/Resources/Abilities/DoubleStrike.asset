@@ -33,6 +33,7 @@ MonoBehaviour:
     _conditions: []
     _effects:
     - id: 0
+    - id: 1
   - _description: '{0}'
     _triggeringEvents: 2
     _possibleTargets: 2
@@ -41,7 +42,7 @@ MonoBehaviour:
     _evaluateConditions: 0
     _conditions: []
     _effects:
-    - id: 1
+    - id: 2
   references:
     version: 1
     00000000:
@@ -54,6 +55,11 @@ MonoBehaviour:
           type: 0
           _amount: 10
     00000001:
+      type: {class: PlaySoundEffect, ns: , asm: Assembly-CSharp}
+      data:
+        _description: 
+        sound: Attack
+    00000002:
       type: {class: PaymentEffect, ns: , asm: Assembly-CSharp}
       data:
         _description: 
