@@ -145,6 +145,9 @@ public class BattleManager : MonoBehaviour
         activatingAbility = ability;
         onTargettingStarted?.Invoke(ability);
 
+        if (!ability.isTargetted)
+            EventTargetChosen(activeCombatant);
+
         bool clear = false;
         foreach (Combatant combatant in _combatants)
         {
