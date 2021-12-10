@@ -171,7 +171,12 @@ public class Trigger : IDescribable
         Debug.Log("ExecuteEffects for " + combatant.gameObject.name + " with target " + target.gameObject.name + ".");
 
         foreach (Effect effect in _effects)
+        {
+            if (effect == null)
+                continue;
+
             effect.Execute(combatant, target);
+        }
 
         combatant.PlayAttackAnim();
     }
@@ -227,6 +232,9 @@ public class Trigger : IDescribable
             case Evaluation.All:
                 foreach (Condition condition in _conditions)
                 {
+                    if (condition == null)
+                        continue;
+
                     if (!condition.Evaluate(caster, target))
                     {
                         return false;
@@ -236,6 +244,9 @@ public class Trigger : IDescribable
             case Evaluation.Any:
                 foreach (Condition condition in _conditions)
                 {
+                    if (condition == null)
+                        continue;
+
                     if (condition.Evaluate(caster, target))
                     {
                         return true;
@@ -245,6 +256,9 @@ public class Trigger : IDescribable
             case Evaluation.Each:
                 foreach (Condition condition in _conditions)
                 {
+                    if (condition == null)
+                        continue;
+
                     if (condition.Evaluate(caster, target))
                     {
                         ExecuteEffects(caster, target);

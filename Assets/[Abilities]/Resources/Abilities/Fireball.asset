@@ -10,45 +10,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 017ed732d113522438d2656921950795, type: 3}
-  m_Name: RunAway
+  m_Name: Fireball
   m_EditorClassIdentifier: 
   description: 
-  _displayName: Run Away
+  _displayName: Fireball
   _icon: {fileID: 0}
-  _cooldown: 0
-  _selectableTargets: 0
+  _cooldown: 3
+  _selectableTargets: 4
   _description: 
   _costs:
   - resource: 2
     direction: -1
     type: 1
     _amount: 100
+  - resource: 1
+    direction: -1
+    type: 0
+    _amount: 33
   _triggers:
   - _description: 
     _triggeringEvents: 2
-    _possibleTargets: 2
+    _possibleTargets: 8
     _maxTargets: 0
     _evaluateTargets: 0
     _evaluateConditions: 0
-    _conditions:
-    - id: 0
+    _conditions: []
     _effects:
-    - id: 1
-    - id: 2
+    - id: 0
   references:
     version: 1
     00000000:
-      type: {class: ChanceCondition, ns: , asm: Assembly-CSharp}
-      data:
-        description: '{0}% chance to trigger'
-        chance: 40
-    00000001:
-      type: {class: LeaveBattleEffect, ns: , asm: Assembly-CSharp}
+      type: {class: PaymentEffect, ns: , asm: Assembly-CSharp}
       data:
         _description: 
-        exitState: 1
-    00000002:
-      type: {class: PlaySoundEffect, ns: , asm: Assembly-CSharp}
-      data:
-        _description: 
-        sound: Flee
+        payment:
+          resource: 0
+          direction: -1
+          type: 0
+          _amount: 10

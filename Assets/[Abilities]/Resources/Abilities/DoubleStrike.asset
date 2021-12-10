@@ -15,7 +15,7 @@ MonoBehaviour:
   description: '{0}{0}'
   _displayName: Double Strike
   _icon: {fileID: 0}
-  _cooldown: 0
+  _cooldown: 2
   _selectableTargets: 4
   _description: 
   _costs:
@@ -40,9 +40,10 @@ MonoBehaviour:
     _maxTargets: 0
     _evaluateTargets: 0
     _evaluateConditions: 0
-    _conditions: []
-    _effects:
+    _conditions:
     - id: 2
+    _effects:
+    - id: 3
   references:
     version: 1
     00000000:
@@ -60,6 +61,11 @@ MonoBehaviour:
         _description: 
         sound: Attack
     00000002:
+      type: {class: ChanceCondition, ns: , asm: Assembly-CSharp}
+      data:
+        description: '{0}% chance to trigger effects.'
+        chance: 20
+    00000003:
       type: {class: PaymentEffect, ns: , asm: Assembly-CSharp}
       data:
         _description: 
